@@ -1,10 +1,9 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { addDocument } from "../../../config/firestoreFunctions";
 import { useMutation } from "@tanstack/react-query";
-import { db } from "../../../config/firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { signIn } from "../../../auth";
 
 interface NewUser {
   name: string;
@@ -31,6 +30,9 @@ export default function HomePage() {
   return (
     <div>
       <h1>Create a New User</h1>
+      <button onClick={() => signIn("credentials", { callbackUrl: "/" })}>
+        Sign in
+      </button>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
