@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ReactQueryProvider } from "../../utils/ReactQueryProvider";
-import { auth, signOut } from "../../auth";
+import { ReactQueryProvider } from "@/utils/ReactQueryProvider";
+import { auth, signOut } from "@/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +21,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {session ? <button onClick={() => signOut()}>Sign out</button> : null}
+        <p>Welcome {session?.user?.name}</p>
         <ReactQueryProvider>{children}</ReactQueryProvider>
       </body>
     </html>
