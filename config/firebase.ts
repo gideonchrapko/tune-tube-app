@@ -1,0 +1,26 @@
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { initFirestore } from "@auth/firebase-adapter";
+import { cert } from "firebase-admin/app";
+
+const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_APP_ID,
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+export const firestore = initFirestore({
+  credential: cert({
+    projectId: process.env.AUTH_FIREBASE_PROJECT_ID,
+    clientEmail: process.env.AUTH_FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.AUTH_FIREBASE_PRIVATE_KEY,
+  }),
+});
+
+export { db };
