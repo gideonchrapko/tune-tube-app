@@ -13,6 +13,20 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      keyframes: {
+        moveCloudsLeft: {
+          "0%": { left: "-200px" },
+          "100%": { left: "100vw" },
+        },
+        moveCloudsRight: {
+          "0%": { right: "-200px" },
+          "100%": { right: "100vw" },
+        },
+      },
+      animation: {
+        moveCloudsLeft: "moveCloudsLeft 42s linear infinite",
+        moveCloudsRight: "moveCloudsRight 45s linear infinite",
+      },
     },
   },
   plugins: [],

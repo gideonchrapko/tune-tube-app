@@ -8,8 +8,8 @@ export function SignIn() {
         await signIn("google");
       }}
     >
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Signin Google
+      <button className="absolute top-5 right-5 px-[30px] py-[10px] bg-black text-white text-sm font-bold cursor-pointer uppercase tracking-[2px] border-none rounded-full transition-transform duration-300 ease-in-out hover:transform hover:scale-105">
+        Sign In with Google
       </button>
     </form>
   );
@@ -23,8 +23,8 @@ export function SignOut() {
         await signOut();
       }}
     >
-      <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-        SignOut
+      <button className="absolute top-5 right-5 px-[30px] py-[10px] bg-black text-white text-sm font-bold cursor-pointer uppercase tracking-[2px] border-none rounded-full transition-transform duration-300 ease-in-out hover:transform hover:scale-105">
+        Sign Out
       </button>
     </form>
   );
