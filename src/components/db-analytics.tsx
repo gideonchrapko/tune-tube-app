@@ -19,14 +19,14 @@ export default function AnalyticsPage() {
       {/* Main Content */}
       <div className={`flex flex-col w-full transition-all duration-300 ${isSidebarOpen ? 'pl-64' : 'pl-16'}`}>
         {/* Header Section */}
-        <div className="flex items-center h-[105px] px-8 py-6 bg-white">
+        <div className="flex items-center h-[105px] px-8 py-6 bg-[#f0f4f7]">
           <div>
-            <p className="font-bold text-black text-lg">Welcome</p>
-            <p className="text-black">MurphsLife</p>
+            <p className="font-bold text-black text-2xl">Welcome,</p>
+            <p className="text-black text-xl">MurphsLife</p>
           </div>
         </div>
 
-        {/* New Section with two wide rectangles */}
+        {/* First Section with two wide rectangles */}
         <div className="flex justify-between items-center h-[573px] px-8 py-6 bg-[#f0f4f7]">
           {/* Rectangle 1 (Left) */}
           <div className="w-1/2 h-64 rounded-xl mx-4 bg-[#f0f4f7] shadow-lg relative flex items-center p-8">
@@ -49,9 +49,9 @@ export default function AnalyticsPage() {
               </div>
 
               {/* YouTube Shorts Logo and Play, aligned with the bottom, made clickable */}
-              <a 
-                href="https://www.youtube.com/source/M6jyrMM8Iec/shorts?bp=8gUeChwSGgoLTTZqeXJNTThJZWMSC002anlyTU04SWVj" 
-                target="_blank" 
+              <a
+                href="https://www.youtube.com/source/M6jyrMM8Iec/shorts?bp=8gUeChwSGgoLTTZqeXJNTThJZWMSC002anlyTU04SWVj"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center mt-4"
               >
@@ -97,9 +97,9 @@ export default function AnalyticsPage() {
               </div>
 
               {/* YouTube Shorts Logo and Play, aligned with the bottom, made clickable */}
-              <a 
-                href="https://www.youtube.com/watch?v=iE9u7EjlgI8&list=PLR52GNCsgit_qaWjCNaUUi20AcooReAKX" 
-                target="_blank" 
+              <a
+                href="https://www.youtube.com/watch?v=iE9u7EjlgI8&list=PLR52GNCsgit_qaWjCNaUUi20AcooReAKX"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center mt-4"
               >
@@ -121,6 +121,90 @@ export default function AnalyticsPage() {
                 width={60}
                 height={60}
               />
+            </div>
+          </div>
+        </div>
+
+        {/* Second Section */}
+        <div className="bg-[#f0f4f7] h-[500px] mt-8 px-8 py-6">
+          {/* Section Title */}
+          <h2 className="text-2xl font-bold text-black">July 2024 Insights</h2>
+
+          {/* Insights Container and Stats Section */}
+          <div className="flex justify-between items-start w-full px-8">
+            {/* Insights Container */}
+            <div className="flex items-center w-3/5 h-80 rounded-xl mt-6 bg-[#f0f4f7] shadow-lg p-12 relative">
+              {/* Cover Art */}
+              <div className="w-2/5 pr-5">
+                <Image
+                  src="https://firebasestorage.googleapis.com/v0/b/tune-tube-app-next.appspot.com/o/Sounds%20of%20Travel%20Artwork.png?alt=media&token=467d70b0-f873-4641-a6be-c7dc8118d217"
+                  alt="Cover Art"
+                  width={180}
+                  height={180}
+                  className="rounded-lg"
+                />
+              </div>
+
+              {/* Text Content */}
+              <div className="w-2/3 flex flex-col">
+                <p className="font-bold text-black text-2xl">My Favorite Song</p>
+                <div className="mt-7">
+                  <p className="text-black text-lg">
+                    <span className="font-semibold">Title:</span> <span>Far from Home</span>
+                  </p>
+                  <p className="text-black text-lg">
+                    <span className="font-semibold">Album:</span> <span>Sounds of Travel</span>
+                  </p>
+                  <p className="text-black text-lg">
+                    <span className="font-semibold">Views:</span> <span>86,357,540</span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Favorite Song Image (Top Right, Hanging off and set to 60x60px) */}
+              <div className="absolute top-0 right-0 -mt-4 -mr-4">
+                <Image
+                  src="https://firebasestorage.googleapis.com/v0/b/tune-tube-app-next.appspot.com/o/Favorite%20Song.png?alt=media&token=85126710-d69a-4894-b116-48619341e3bb"
+                  alt="Favorite Song"
+                  width={60}
+                  height={60}
+                />
+              </div>
+            </div>
+
+            {/* Spacer using flex-grow */}
+            <div className="flex-grow"></div>
+
+            {/* Stats Section */}
+            <div className="flex flex-col justify-start w-2/5 h-80 mt-6 ml-20">
+
+              {/* Stats Data */}
+              <div className="mt-4 space-y-6" style={{ fontFamily: 'Avenir' }}>
+                <p className="text-black text-xl">
+                  <span className="font-semibold">Monthly Views: </span>
+                  <span>90,106,396</span>
+                </p>
+                <p className="text-black text-xl">
+                  <span className="font-semibold">LifeTime Views: </span>
+                  <span>93,439,996</span>
+                </p>
+                <p className="text-black text-xl">
+                  <span className="font-semibold">RPM: </span>
+                  <span>$0.08</span>
+                </p>
+                <p className="text-black text-xl">
+                  <span className="font-semibold">TunePool Earnings: </span>
+                  <span>$2,361.03</span>
+                </p>
+                <p className="text-black text-xl">
+                  <span className="font-semibold">Reclaimed AdSense: </span>
+                  <span>$4,505.32</span>
+                </p>
+                <p className="text-black text-xl">
+                  <span className="font-semibold">Total Monthly Earnings: </span>
+                  <span>$6,866.35</span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
