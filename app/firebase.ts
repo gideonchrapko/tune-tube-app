@@ -16,7 +16,5 @@ export const getFirebaseAdminApp = () => {
     return admin.apps[0] as admin.app.App;
   }
 
-  // admin.firestore.setLogFunction(console.log);
-
   return initializeApp();
 };

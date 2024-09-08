@@ -91,16 +91,16 @@ export default function Header() {
               <p className="font-semibold">Dashboard</p>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={navigate("creator-analytics")}>
+            <DropdownMenuItem onClick={navigate("dashboard/creator-analytics")}>
               <p className="font-light">Creator Analytics</p>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={navigate("sounds")}>
+            <DropdownMenuItem onClick={navigate("dashboard/sounds")}>
               <p className="font-light">Sounds</p>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={navigate("sync")}>
+            <DropdownMenuItem onClick={navigate("dashboard/sync")}>
               <p className="font-light">Sync</p>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={navigate("settings")}>
+            <DropdownMenuItem onClick={navigate("dashboard/settings")}>
               <p className="font-light">Settings</p>
             </DropdownMenuItem>
             <DropdownMenuSeparator />

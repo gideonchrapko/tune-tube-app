@@ -1,12 +1,10 @@
 import { AuthProvider } from "@/app/auth/AuthProvider";
-import AnalyticsPage from "@/components/db-analytics";
-import DashboardHome from "@/components/db-home";
 import { config } from "@/config/base";
 import { toUser } from "@/hooks/user";
 import { getTokens } from "next-firebase-auth-edge";
 import { cookies, headers } from "next/headers";
 
-export default async function Dashboard() {
+export default async function Sync() {
   const tokens = await getTokens(cookies(), {
     apiKey: config.firebase.apiKey!,
     cookieName: "AuthToken",
@@ -19,7 +17,11 @@ export default async function Dashboard() {
 
   return (
     <AuthProvider user={user}>
-      <DashboardHome />
+      <div className="bg-gray-100 h-full pt-24">
+        <div className="flex items-center h-[105px] px-8 py-6">
+          <p className="font-bold text-black text-6xl">Sync</p>
+        </div>
+      </div>
     </AuthProvider>
   );
 }
