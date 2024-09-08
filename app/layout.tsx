@@ -8,6 +8,7 @@ import { cookies, headers } from "next/headers";
 import { toUser } from "@/hooks/user";
 import { config } from "@/config/base";
 import { AuthProvider } from "./auth/AuthProvider";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 const pacifico = Pacifico({ subsets: ["latin"], weight: "400" });
@@ -39,10 +40,12 @@ export default async function RootLayout({
         className={`${inter.className} ${pacifico.className} ${poppins.className}`}
       >
         <ReactQueryProvider>
-          <AuthProvider user={user}>
-            <Header />
-            {children}
-          </AuthProvider>
+          <Suspense>
+            <AuthProvider user={user}>
+              <Header />
+            </AuthProvider>
+          </Suspense>
+          {children}
         </ReactQueryProvider>
       </body>
     </html>

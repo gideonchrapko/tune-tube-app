@@ -7,6 +7,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import {
+  DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "./ui/dropdown-menu";
+import Image from "next/image";
 
 export default function Header() {
   const { user } = useAuth();
@@ -24,12 +33,9 @@ export default function Header() {
     }
   }, [user?.displayName]);
 
-  const navigate = useCallback(
-    (path?: "/settings") => {
-      return () => router.push(`/dashboard${path ?? ""}`);
-    },
-    [router],
-  );
+  const navigate = useCallback(() => {
+    return () => router.push("/dashboard");
+  }, [router]);
 
   const handleLogout = useCallback(async () => {
     const auth = getFirebaseAuth();
@@ -42,17 +48,45 @@ export default function Header() {
 
   return (
     <div className="fixed top-5 right-5 z-50 w-full text-right">
-      {user ? (
-        <>
-          <Link href="/login">
-            <Button className="mr-2">{user?.displayName}</Button>
-            <Button onClick={handleLogout}>Logout</Button>
-          </Link>
-        </>
+      {user !== null ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              className="relative min-w-[125px] pr-7 max-md:mx-auto md:my-auto h-14 rounded-full"
+            >
+              {user?.photoURL && (
+                <Image
+                  src={user.photoURL}
+                  alt="google photo"
+                  width={35}
+                  height={35}
+                  className="mx-auto rounded-full absolute left-[10px]"
+                />
+              )}
+              <h4 className="ml-auto text-lg">{initials}</h4>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="rounded-lg">
+            <DropdownMenuLabel>
+              <p className="font-bold">{user?.displayName}</p>
+              <p className="font-light text-xs">{user?.email}</p>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={navigate()}>Dashboard</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       ) : (
         <>
           <Link href="/login">
-            <Button>Login</Button>
+            <Button
+              variant="outline"
+              className="relative min-w-[125px] max-md:mx-auto md:my-auto h-14 rounded-full"
+            >
+              Login
+            </Button>
           </Link>
         </>
       )}
