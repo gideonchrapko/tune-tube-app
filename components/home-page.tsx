@@ -5,23 +5,6 @@ import Image from "next/image";
 export default function HomePage() {
   return (
     <main className="bg-[#f0f4f7] h-screen flex flex-col justify-center items-center relative perspective-[1000px] overflow-hidden">
-      <div className="absolute top-5 left-5">
-        <a
-          href="https://www.youtube.com/channel/UCYZZIq2mYWJ9wq2AmVA6iNg"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            src="https://firebasestorage.googleapis.com/v0/b/tune-tube-app-next.appspot.com/o/Black%20Logo.png?alt=media&token=72e35119-916e-45e8-bccd-06b2abad932d"
-            alt="Logo"
-            className="logo"
-            width={80}
-            height={80}
-            priority
-          />
-        </a>
-      </div>
-
       <div className="flex justify-center items-center mt-[50px]">
         <Image
           src="https://firebasestorage.googleapis.com/v0/b/tune-tube-app-next.appspot.com/o/Intro.png?alt=media&token=5a3bf77f-08bc-4c76-ac77-6fe3928ba25c"

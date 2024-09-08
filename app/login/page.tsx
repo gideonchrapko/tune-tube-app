@@ -8,7 +8,7 @@ import { UserCredential } from "firebase/auth";
 import { loginWithCredential } from "@/api";
 import { useRedirectParam } from "@/hooks/useRedirectParam";
 import { useRedirectAfterLogin } from "@/hooks/userRedirectAfterLogin";
-import { Loader2 } from "lucide-react";
+import { FaGoogle } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { useFirebaseAuth } from "../auth/firebase";
 
@@ -40,9 +40,11 @@ export default function LoginPage() {
         <h1 className="text-6xl font-bold mb-8 text-gray-800">Login.</h1>
         <Button
           onClick={handleLoginWithGoogle}
-          className="rounded-full font-bold text-xl hover:scale-110 transition-all p-5"
+          className="rounded-full font-bold text-xl hover:scale-110 transition-all p-6"
+          variant="outline"
         >
           Sign in with Google
+          <FaGoogle className="ml-3" />
         </Button>
       </div>
     </div>

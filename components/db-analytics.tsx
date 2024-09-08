@@ -1,33 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import Sidebar from "@/components/sidebar";
+import { useAuth } from "@/app/auth/AuthContext";
 import Image from "next/image";
 
 export default function AnalyticsPage() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
-  const handleSidebarToggle = (isOpen: boolean) => {
-    setIsSidebarOpen(isOpen);
-  };
+  const { user } = useAuth();
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <Sidebar onToggle={handleSidebarToggle} />
-
-      <div
-        className={`flex flex-col w-full transition-all duration-300 ${
-          isSidebarOpen ? "pl-64" : "pl-16"
-        }`}
-      >
-        <div className="flex items-center h-[105px] px-8 py-6 bg-white">
+    <div className="flex min-h-screen bg-gray-100 pt-24">
+      <div className="flex flex-col w-full transition-all duration-300">
+        <div className="flex items-center h-[105px] px-8 py-6">
+          <p className="font-bold text-black text-6xl">Creator Analytics</p>
+        </div>
+        <div className="flex items-center h-[105px] px-8 py-6">
           <div>
-            <p className="font-bold text-black text-lg">Welcome</p>
-            <p className="text-black">MurphsLife</p>
+            <p className="font-bold text-black text-3xl">Welcome</p>
+            <p className="text-black text-3xl">{user?.displayName}</p>
           </div>
         </div>
 
-        <div className="flex justify-between items-center h-[573px] px-8 py-6 bg-[#f0f4f7]">
+        <div className="flex justify-between items-center h-[400px] px-8 py-6 bg-[#f0f4f7]">
           <div className="w-1/2 h-64 rounded-xl mx-4 bg-[#f0f4f7] shadow-lg relative flex items-center p-8">
             <div className="w-1/3 pr-6">
               <Image

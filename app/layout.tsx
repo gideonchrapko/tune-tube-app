@@ -9,6 +9,7 @@ import { toUser } from "@/hooks/user";
 import { config } from "@/config/base";
 import { AuthProvider } from "./auth/AuthProvider";
 import { Suspense } from "react";
+import Footer from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 const pacifico = Pacifico({ subsets: ["latin"], weight: "400" });
@@ -40,12 +41,13 @@ export default async function RootLayout({
         className={`${inter.className} ${pacifico.className} ${poppins.className}`}
       >
         <ReactQueryProvider>
-          <Suspense>
-            <AuthProvider user={user}>
+          <AuthProvider user={user}>
+            <Suspense>
               <Header />
-            </AuthProvider>
-          </Suspense>
+            </Suspense>
+          </AuthProvider>
           {children}
+          <Footer />
         </ReactQueryProvider>
       </body>
     </html>
