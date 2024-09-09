@@ -56,8 +56,8 @@ export default function Header() {
           src="https://firebasestorage.googleapis.com/v0/b/tune-tube-app-next.appspot.com/o/Black%20Logo.png?alt=media&token=72e35119-916e-45e8-bccd-06b2abad932d"
           alt="Logo"
           className="logo"
-          width={70}
-          height={70}
+          width={50}
+          height={50}
           priority
         />
       </Link>
