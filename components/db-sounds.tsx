@@ -21,7 +21,7 @@ const mockSounds: Sound[] = [
       "https://firebasestorage.googleapis.com/v0/b/tune-tube-app-next.appspot.com/o/Images%2FAlbum%20Artwork%2FDIY%20-%20Dashboard.png?alt=media&token=df5b21a5-068c-4da6-a3d8-b2f693e61cc4",
   },
   {
-    title: "Dizzy Vibes",
+    title: "Swag",
     albumTitle: "Bring the Energy",
     mood: ["Chill", "Relaxed"],
     songUrl:
