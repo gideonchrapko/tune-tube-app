@@ -7,7 +7,6 @@ import { cookies, headers } from "next/headers";
 
 export default async function Sounds() {
   try {
-    console.log("Retrieving tokens...");
     const tokens = await getTokens(cookies(), {
       apiKey: config.firebase.apiKey!,
       cookieName: "AuthToken",
@@ -16,10 +15,7 @@ export default async function Sounds() {
       headers: headers(),
     });
 
-    console.log("Tokens retrieved:", tokens);
-    
     const user = tokens ? toUser(tokens) : null;
-    console.log("User retrieved from tokens:", user);
 
     return (
       <AuthProvider user={user}>

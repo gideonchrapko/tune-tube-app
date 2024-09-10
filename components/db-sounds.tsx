@@ -68,7 +68,10 @@ const DbSoundsPage = () => {
     }
   };
 
-  const handleSeek = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSeek = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const currentAudio = audioRefs.current[index];
     if (currentAudio) {
       const seekTime = (Number(e.target.value) / 100) * currentAudio.duration;
@@ -80,7 +83,7 @@ const DbSoundsPage = () => {
     const matchesSearchQuery =
       sound.title.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
       sound.mood.some((m) =>
-        m.toLowerCase().includes(searchQuery.toLowerCase().trim())
+        m.toLowerCase().includes(searchQuery.toLowerCase().trim()),
       );
     const matchesMood = selectedMood ? sound.mood.includes(selectedMood) : true;
     return matchesSearchQuery && matchesMood;
@@ -104,11 +107,12 @@ const DbSoundsPage = () => {
           {moods.map((mood) => (
             <button
               key={mood}
-              className={`px-3 py-1 border rounded-md text-sm ${selectedMood === mood
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200"
-                }`}
-              onClick={() => setSelectedMood(mood === selectedMood ? null : mood)}
+              className={`px-3 py-1 border rounded-md text-sm ${
+                selectedMood === mood ? "bg-blue-500 text-white" : "bg-gray-200"
+              }`}
+              onClick={() =>
+                setSelectedMood(mood === selectedMood ? null : mood)
+              }
             >
               {mood}
             </button>
@@ -133,8 +137,9 @@ const DbSoundsPage = () => {
                 <div className="flex flex-col justify-between w-full">
                   <div className="flex items-center space-x-4">
                     <button
-                      className={`text-blue-500 hover:text-blue-700 ${playingIndex === index ? "fa fa-pause" : "fa fa-play"
-                        }`}
+                      className={`text-blue-500 hover:text-blue-700 ${
+                        playingIndex === index ? "fa fa-pause" : "fa fa-play"
+                      }`}
                       onClick={() => handlePlayPause(index)}
                     >
                       {playingIndex === index ? "Pause" : "Play"}
@@ -186,7 +191,9 @@ const DbSoundsPage = () => {
                   }}
                   src={sound.songUrl}
                   onTimeUpdate={() => handleTimeUpdate(index)}
-                  onLoadedMetadata={() => setDuration(audioRefs.current[index]?.duration || 0)}
+                  onLoadedMetadata={() =>
+                    setDuration(audioRefs.current[index]?.duration || 0)
+                  }
                 />
               </div>
             ))
