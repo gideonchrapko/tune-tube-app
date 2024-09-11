@@ -1,0 +1,219 @@
+"use client";
+
+import { useState } from "react";
+
+// Define a type for paymentFields
+type PaymentFields = {
+  accountNumber?: string;
+  routingNumber?: string;
+  name?: string;
+  swiftCode?: string;
+  bankAddress?: string;
+  billingAddress?: string;
+  email?: string;
+};
+
+const SettingsPage = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [dob, setDob] = useState("");
+  const [address, setAddress] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentFields, setPaymentFields] = useState<PaymentFields>({}); // Updated type for paymentFields
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+
+  const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setProfilePicture(e.target.files[0]);
+    } else {
+      setProfilePicture(null);
+    }
+  };
+
+  const handlePaymentMethodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPaymentMethod(e.target.value);
+    setPaymentFields({});
+  };
+
+  const handlePaymentFieldChange = (field: keyof PaymentFields, value: string) => {
+    setPaymentFields((prevFields) => ({
+      ...prevFields,
+      [field]: value,
+    }));
+  };
+
+  const handleSaveChanges = () => {
+    // Placeholder function for saving changes
+    console.log("First Name:", firstName);
+    console.log("Last Name:", lastName);
+    console.log("Date of Birth:", dob);
+    console.log("Address:", address);
+    console.log("Payment Method:", paymentMethod);
+    console.log("Payment Fields:", paymentFields);
+    console.log("Profile Picture:", profilePicture);
+  };
+
+  return (
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 py-20 mt-10">
+      <div className="w-full max-w-4xl bg-white p-8 rounded-lg shadow-md">
+
+        {/* Profile Picture Upload */}
+        <div className="mb-8">
+          <label className="block text-lg font-semibold mb-2">Profile Picture</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleProfilePictureChange}
+            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          />
+          {profilePicture && (
+            <p className="text-gray-700 mt-2">Selected file: {profilePicture.name}</p>
+          )}
+        </div>
+
+        {/* First Name and Last Name */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div>
+            <label className="block text-lg font-semibold mb-2">First Name</label>
+            <input
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg"
+            />
+          </div>
+          <div>
+            <label className="block text-lg font-semibold mb-2">Last Name</label>
+            <input
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg"
+            />
+          </div>
+        </div>
+
+        {/* Date of Birth */}
+        <div className="mb-8">
+          <label className="block text-lg font-semibold mb-2">Date of Birth</label>
+          <input
+            type="date"
+            value={dob}
+            onChange={(e) => setDob(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg"
+          />
+        </div>
+
+        {/* Address */}
+        <div className="mb-8">
+          <label className="block text-lg font-semibold mb-2">Address</label>
+          <input
+            type="text"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg"
+          />
+        </div>
+
+        {/* Payment Method */}
+        <div className="mb-8">
+          <label className="block text-lg font-semibold mb-2">Payment Method</label>
+          <select
+            value={paymentMethod}
+            onChange={handlePaymentMethodChange}
+            className="w-full p-3 border border-gray-300 rounded-lg"
+          >
+            <option value="">Select Payment Method</option>
+            <option value="ACH">ACH</option>
+            <option value="Wire">Wire</option>
+            <option value="PayPal">PayPal</option>
+          </select>
+        </div>
+
+        {/* Dynamically Display Payment Fields Based on Selection */}
+        {paymentMethod === "ACH" && (
+          <div className="mb-8">
+            <input
+              type="text"
+              placeholder="Account Number"
+              value={paymentFields.accountNumber || ""}
+              onChange={(e) => handlePaymentFieldChange("accountNumber", e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg mb-4"
+            />
+            <input
+              type="text"
+              placeholder="Routing Number"
+              value={paymentFields.routingNumber || ""}
+              onChange={(e) => handlePaymentFieldChange("routingNumber", e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg mb-4"
+            />
+            <input
+              type="text"
+              placeholder="Name"
+              value={paymentFields.name || ""}
+              onChange={(e) => handlePaymentFieldChange("name", e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg"
+            />
+          </div>
+        )}
+
+        {paymentMethod === "Wire" && (
+          <div className="mb-8">
+            <input
+              type="text"
+              placeholder="SWIFT Code"
+              value={paymentFields.swiftCode || ""}
+              onChange={(e) => handlePaymentFieldChange("swiftCode", e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg mb-4"
+            />
+            <input
+              type="text"
+              placeholder="Account Number"
+              value={paymentFields.accountNumber || ""}
+              onChange={(e) => handlePaymentFieldChange("accountNumber", e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg mb-4"
+            />
+            <input
+              type="text"
+              placeholder="Bank Address"
+              value={paymentFields.bankAddress || ""}
+              onChange={(e) => handlePaymentFieldChange("bankAddress", e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg mb-4"
+            />
+            <input
+              type="text"
+              placeholder="Billing Address"
+              value={paymentFields.billingAddress || ""}
+              onChange={(e) => handlePaymentFieldChange("billingAddress", e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg"
+            />
+          </div>
+        )}
+
+        {paymentMethod === "PayPal" && (
+          <div className="mb-8">
+            <input
+              type="email"
+              placeholder="PayPal Email"
+              value={paymentFields.email || ""}
+              onChange={(e) => handlePaymentFieldChange("email", e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg"
+            />
+          </div>
+        )}
+
+        {/* Save Button */}
+        <div className="flex justify-center">
+          <button
+            onClick={handleSaveChanges}
+            className="bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600"
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SettingsPage;
