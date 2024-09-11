@@ -34,17 +34,26 @@ const DbSoundsPage = () => {
   });
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
+
+  const toggleMood = (mood: string) => {
+    setSelectedMoods((prevMoods) =>
+      prevMoods.includes(mood)
+        ? prevMoods.filter((m) => m !== mood)
+        : [...prevMoods, mood]
+    );
+  };
 
   const filteredSounds = soundsFirebase?.filter((sound: any) => {
     const matchesSearchQuery =
       sound.title.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
       sound.mood.some((m: any) =>
-        m.toLowerCase().includes(searchQuery.toLowerCase().trim()),
+        m.toLowerCase().includes(searchQuery.toLowerCase().trim())
       );
-    const matchesMood = selectedMood
-      ? sound.mood.includes(selectedMood.toLowerCase())
-      : true;
+    const matchesMood =
+      selectedMoods.length > 0
+        ? selectedMoods.every((mood) => sound.mood.includes(mood.toLowerCase()))
+        : true;
 
     return matchesSearchQuery && matchesMood;
   });
@@ -65,11 +74,9 @@ const DbSoundsPage = () => {
             <button
               key={mood}
               className={`px-3 my-1 border rounded-md text-sm ${
-                selectedMood === mood ? "bg-blue-500 text-white" : "bg-gray-200"
+                selectedMoods.includes(mood) ? "bg-blue-500 text-white" : "bg-gray-200"
               }`}
-              onClick={() =>
-                setSelectedMood(mood === selectedMood ? null : mood)
-              }
+              onClick={() => toggleMood(mood)}
             >
               {mood}
             </button>
