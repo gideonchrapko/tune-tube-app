@@ -11,7 +11,7 @@ export const clientConfig = {
   projectId: config.firebase.projectId!,
   storageBucket: config.firebase.storageBucket!,
   messagingSenderId: config.firebase.messagingSenderId!,
-  appId: config.firebase.apiKey!,
+  appId: config.firebase.appId!,
   measurementId: config.firebase.measurementId!,
 };
 
