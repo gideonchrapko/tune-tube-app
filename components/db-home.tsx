@@ -1,9 +1,12 @@
+"use client";
+
+import { useAuth } from "@/app/auth/AuthContext";
+
 export default function DashboardHome() {
+  const { user } = useAuth();
+
   return (
     <div className="bg-gray-100 h-full pt-24">
-      <div className="flex items-center h-[105px] px-8 py-6">
-        <p className="font-bold text-black text-6xl">Dashboard</p>
-      </div>
       <main className="py-10">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
