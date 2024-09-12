@@ -2,7 +2,6 @@ import {
   Auth,
   AuthError,
   AuthProvider,
-  User,
   UserCredential,
   browserPopupRedirectResolver,
   GoogleAuthProvider,
@@ -19,7 +18,7 @@ export const logout = async (auth: Auth): Promise<void> => {
   return signOut(auth);
 };
 
-export const getGoogleProvider = (auth: Auth) => {
+export const getGoogleProvider = () => {
   const provider = new GoogleAuthProvider();
   provider.addScope("profile");
   provider.addScope("email");

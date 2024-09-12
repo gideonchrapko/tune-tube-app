@@ -1,26 +1,29 @@
-import React, { useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
+import React, { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 
 interface UploaderProps {
   onVideoUpload: (files: File[]) => void;
 }
 
 const Uploader: React.FC<UploaderProps> = ({ onVideoUpload }) => {
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    onVideoUpload(acceptedFiles);
-  }, [onVideoUpload]);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      onVideoUpload(acceptedFiles);
+    },
+    [onVideoUpload],
+  );
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
-      'video/*': ['.mp4', '.mkv', '.avi'],
+      "video/*": [".mp4", ".mkv", ".avi"],
     },
   });
 
   return (
     <div
       {...getRootProps()}
-      className="flex flex-col items-center justify-center w-full h-[550px] border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 p-4 text-center mt-20 cursor-pointer"
+      className="flex flex-col items-center justify-center w-full h-[550px] border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 p-4 text-center mt-10 cursor-pointer"
     >
       <input {...getInputProps()} />
       <svg

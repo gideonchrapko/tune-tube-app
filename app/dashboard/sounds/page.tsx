@@ -1,4 +1,5 @@
 import { AuthProvider } from "@/app/auth/AuthProvider";
+import { getFirebaseApp } from "@/app/auth/firebase";
 import DbSoundsPage from "@/components/db-sounds";
 import { config } from "@/config/base";
 import { toUser } from "@/hooks/user";
