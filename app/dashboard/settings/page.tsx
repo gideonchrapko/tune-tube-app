@@ -1,19 +1,13 @@
 import { AuthProvider } from "@/app/auth/AuthProvider";
 import SettingsPage from "@/components/db-settings";
-import { config } from "@/config/base";
+import { authConfig } from "@/config/server-config";
 import { toUser } from "@/hooks/user";
 import { getTokens } from "next-firebase-auth-edge";
 import { cookies, headers } from "next/headers";
 
 export default async function Settings() {
   try {
-    const tokens = await getTokens(cookies(), {
-      apiKey: config.firebase.apiKey!,
-      cookieName: "AuthToken",
-      cookieSignatureKeys: config.server.cookieSignatureKeys,
-      serviceAccount: config.server.serviceAccount,
-      headers: headers(),
-    });
+    const tokens = await getTokens(cookies(), authConfig);
 
     const user = tokens ? toUser(tokens) : null;
 

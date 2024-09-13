@@ -1,7 +1,5 @@
 "use client";
 
-import { fetchSounds } from "@/config/queries";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { FilterSounds } from "./filter-sounds";
 
@@ -23,16 +21,7 @@ const moods = [
   "Trendy",
 ];
 
-const DbSoundsPage = () => {
-  const {
-    data: soundsFirebase,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["sounds"],
-    queryFn: fetchSounds,
-  });
-
+const DbSoundsPage = ({ soundsFirebase }: { soundsFirebase: any }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
 
@@ -84,26 +73,16 @@ const DbSoundsPage = () => {
             </button>
           ))}
         </div>
-        {!isLoading && (
+        {filteredSounds!.length > 0 ? (
           <>
-            {filteredSounds!.length > 0 ? (
-              <>
-                {filteredSounds?.map((sound: any, index: number) => (
-                  <div key={index}>
-                    <FilterSounds
-                      key={index}
-                      index={index}
-                      sound={sound}
-                      isLoading={isLoading}
-                      error={error}
-                    />
-                  </div>
-                ))}
-              </>
-            ) : (
-              <p>No sounds found.</p>
-            )}
+            {filteredSounds?.map((sound: any, index: number) => (
+              <div key={index}>
+                <FilterSounds key={index} index={index} sound={sound} />
+              </div>
+            ))}
           </>
+        ) : (
+          <p>No sounds found.</p>
         )}
       </div>
     </div>

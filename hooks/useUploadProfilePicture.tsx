@@ -1,4 +1,4 @@
-import { storage } from "@/config/firebase.config";
+// import { storage } from "@/config/firebase.config";
 import { useMutation } from "@tanstack/react-query";
 import { updateProfile, User } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";

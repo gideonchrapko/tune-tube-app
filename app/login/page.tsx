@@ -10,15 +10,14 @@ import { useRedirectParam } from "@/hooks/useRedirectParam";
 import { useRedirectAfterLogin } from "@/hooks/userRedirectAfterLogin";
 import { FaGoogle } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
-import { useFirebaseAuth } from "../auth/firebase";
 import { Loader2 } from "lucide-react";
+import { getFirebaseAuth } from "../auth/firebase";
 
 export default function LoginPage() {
   const router = useRouter();
   const [hasLogged, setHasLogged] = React.useState(false);
   const redirect = useRedirectParam();
   const redirectAfterLogin = useRedirectAfterLogin();
-  const { getFirebaseAuth } = useFirebaseAuth();
 
   async function handleLogin(credential: UserCredential) {
     await loginWithCredential(credential);
@@ -29,7 +28,7 @@ export default function LoginPage() {
     async () => {
       setHasLogged(false);
       const auth = getFirebaseAuth();
-      await handleLogin(await loginWithProvider(auth, getGoogleProvider(auth)));
+      await handleLogin(await loginWithProvider(auth, getGoogleProvider()));
 
       router.push(redirect ?? "/");
     },
