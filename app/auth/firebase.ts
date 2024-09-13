@@ -7,6 +7,7 @@ import {
 } from "firebase/auth";
 import { clientConfig } from "@/config/client-config";
 import { getOrInitializeAppCheck } from "@/app-check";
+import { getStorage } from "firebase/storage";
 
 export const getFirebaseApp = () => {
   if (getApps().length) {
@@ -38,4 +39,15 @@ export function getFirebaseAuth() {
   }
 
   return auth;
+}
+
+export function getFirebaseStorage() {
+  const storage = getStorage(getFirebaseApp());
+
+  // if (process.env.NEXT_PUBLIC_EMULATOR_HOST) {
+  //   const [host, port] = process.env.NEXT_PUBLIC_EMULATOR_HOST.split(':');
+  //   connectStorageEmulator(storage, host, parseInt(port));
+  // }
+
+  return storage;
 }

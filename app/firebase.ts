@@ -6,8 +6,12 @@ const initializeApp = () => {
     return admin.initializeApp();
   }
 
+  // return admin.initializeApp({
+  //   credential: admin.credential.cert(authConfig.serviceAccount),
+  // });
   return admin.initializeApp({
     credential: admin.credential.cert(authConfig.serviceAccount),
+    storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET!,
   });
 };
 

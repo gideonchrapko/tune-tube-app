@@ -11,6 +11,7 @@ export default async function Sounds() {
   try {
     const tokens = await getTokens(cookies(), authConfig);
     const user = tokens ? toUser(tokens) : null;
+
     const db = getFirestore(getFirebaseAdminApp());
     const collectionRef = db.collection("sounds");
     const snapshot = await collectionRef.get();

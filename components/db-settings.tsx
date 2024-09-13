@@ -25,7 +25,7 @@ const SettingsPage = () => {
   const [paymentFields, setPaymentFields] = useState<PaymentFields>({});
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const { mutate: uploadMutation } = useUploadProfilePicture(user as any);
+  const { mutate: uploadMutation } = useUploadProfilePicture();
 
   const handleProfilePictureChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -36,7 +36,7 @@ const SettingsPage = () => {
       setPreviewUrl(URL.createObjectURL(file)); // Create preview URL
     } else {
       setProfilePicture(null);
-      setPreviewUrl(null); // Clear preview
+      setPreviewUrl(null);
     }
   };
 
@@ -62,10 +62,6 @@ const SettingsPage = () => {
       uploadMutation(profilePicture);
     }
   }, [profilePicture]);
-
-  // const handleSaveChanges = () => {
-  //   useUploadProfilePicture();
-  // };
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 py-10">

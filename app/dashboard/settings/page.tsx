@@ -8,7 +8,6 @@ import { cookies, headers } from "next/headers";
 export default async function Settings() {
   try {
     const tokens = await getTokens(cookies(), authConfig);
-
     const user = tokens ? toUser(tokens) : null;
 
     return (

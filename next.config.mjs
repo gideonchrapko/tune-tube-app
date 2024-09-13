@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["firebasestorage.googleapis.com", "lh3.googleusercontent.com"],
+    domains: [
+      "firebasestorage.googleapis.com",
+      "lh3.googleusercontent.com",
+      "storage.googleapis.com",
+      "tune-tube-app-next.appspot.com",
+    ],
   },
   env: {
     FIREBASE_PRIVATE_KEY: process.env.AUTH_FIREBASE_PRIVATE_KEY?.replace(
