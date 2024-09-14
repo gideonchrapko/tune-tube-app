@@ -1,4 +1,4 @@
-import { FirebaseToken } from "@/types/Firebase";
+import { FirebaseToken } from "@/types/firebase-types";
 
 export async function getLogin(idTokenResult: FirebaseToken) {
   try {

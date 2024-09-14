@@ -3,7 +3,7 @@ import SettingsPage from "@/components/db-settings";
 import { authConfig } from "@/config/server-config";
 import { toUser } from "@/hooks/user";
 import { getTokens } from "next-firebase-auth-edge";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 
 export default async function Settings() {
   try {

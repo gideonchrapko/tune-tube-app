@@ -13,6 +13,5 @@ export const uploadProfilePicture = async (file: File) => {
       },
     },
   );
-
   return response.data;
 };

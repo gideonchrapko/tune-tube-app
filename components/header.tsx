@@ -47,7 +47,6 @@ export default function Header() {
     await logout();
 
     router.refresh();
-    // setHasLoggedOut(true);
   });
 
   return (

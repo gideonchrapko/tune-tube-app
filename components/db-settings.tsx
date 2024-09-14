@@ -4,6 +4,18 @@ import { useAuth } from "@/app/auth/AuthContext";
 import { useUploadProfilePicture } from "@/hooks/useUploadProfilePicture";
 import Image from "next/image";
 import { useCallback, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
+import { Button } from "./ui/button";
 
 type PaymentFields = {
   accountNumber?: string;
@@ -26,6 +38,7 @@ const SettingsPage = () => {
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { mutate: uploadMutation } = useUploadProfilePicture();
+  const clickable = profilePicture!;
 
   const handleProfilePictureChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -263,12 +276,35 @@ const SettingsPage = () => {
             )}
 
             <div className="flex justify-center">
-              <button
-                onClick={handleSave}
-                className="bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600"
-              >
-                Save Changes
-              </button>
+              {clickable ? (
+                <AlertDialog>
+                  <AlertDialogTrigger>
+                    <Button className="py-3 px-6 rounded-lg bg-blue-500 hover:bg-blue-600">
+                      Save Changes
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you sure you want to save these changes?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action will permanently change your settings
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleSave}>
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              ) : (
+                <Button className="py-3 px-6 rounded-lg bg-gray-500 hover:bg-gray-600">
+                  Save Changes
+                </Button>
+              )}
             </div>
           </div>
         </div>
