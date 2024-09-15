@@ -12,6 +12,7 @@ import { FaGoogle } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { getFirebaseAuth } from "../auth/firebase";
+import { createUserProfile } from "@/config/queries";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,6 +22,8 @@ export default function LoginPage() {
 
   async function handleLogin(credential: UserCredential) {
     await loginWithCredential(credential);
+
+    createUserProfile();
     redirectAfterLogin();
   }
 

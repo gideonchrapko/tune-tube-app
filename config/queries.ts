@@ -15,3 +15,26 @@ export const uploadProfilePicture = async (file: File) => {
   );
   return response.data;
 };
+
+export const uploadAddress = async (address: string) => {
+  const response = await axiosInstance.post(
+    "/api/update-address",
+    { address: address },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  return response;
+};
+
+export const createUserProfile = async () => {
+  const response = await axiosInstance.post("/api/check-create-user", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return response.data;
+};

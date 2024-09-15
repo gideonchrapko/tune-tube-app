@@ -1,9 +1,12 @@
 "use client";
 
 import { useAuth } from "@/app/auth/AuthContext";
-import { useUploadProfilePicture } from "@/hooks/useUploadProfilePicture";
+import {
+  useUploadAddress,
+  useUploadProfilePicture,
+} from "@/hooks/useUploadProfilePicture";
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,6 +19,7 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import { Button } from "./ui/button";
+import { AutocompleteComponent } from "./address-autocomplete";
 
 type PaymentFields = {
   accountNumber?: string;
@@ -32,13 +36,24 @@ const SettingsPage = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [dob, setDob] = useState("");
-  const [address, setAddress] = useState("");
+  const [addressNew, setAddressNew] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [paymentFields, setPaymentFields] = useState<PaymentFields>({});
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { mutate: uploadMutation } = useUploadProfilePicture();
-  const clickable = profilePicture!;
+  const { mutate: uploadAddressMutation } = useUploadAddress();
+  const clickable = profilePicture || addressNew;
+  const [existingAddress, setExistingAddress] = useState("");
+
+  useEffect(() => {
+    const fetchUserAddress = async () => {
+      if (user?.customClaims.address) {
+        setExistingAddress(user?.customClaims.address);
+      }
+    };
+    fetchUserAddress();
+  }, []);
 
   const handleProfilePictureChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -74,7 +89,11 @@ const SettingsPage = () => {
     if (profilePicture) {
       uploadMutation(profilePicture);
     }
-  }, [profilePicture]);
+    if (addressNew) {
+      // @ts-ignore
+      uploadAddressMutation(addressNew);
+    }
+  }, [profilePicture, addressNew]);
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 py-10">
@@ -164,11 +183,9 @@ const SettingsPage = () => {
               <label className="block text-lg font-semibold mb-2">
                 Address
               </label>
-              <input
-                type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg"
+              <AutocompleteComponent
+                setAddressNew={setAddressNew}
+                existingAddress={existingAddress}
               />
             </div>
 

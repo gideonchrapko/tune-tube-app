@@ -7,9 +7,10 @@ import admin from "firebase-admin";
 import { v4 as uuidv4 } from "uuid";
 import { refreshNextResponseCookies } from "next-firebase-auth-edge/lib/next/cookies";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
-  const tokens = await getTokens(request.cookies, authConfig);
+  const tokens = await getTokens(cookies(), authConfig);
 
   if (!tokens) {
     return NextResponse.json(
@@ -29,6 +30,14 @@ export async function POST(request: NextRequest) {
     const bucket = admin
       .storage()
       .bucket(process.env.NEXT_PUBLIC_STORAGE_BUCKET!);
+
+    const [files] = await bucket.getFiles({
+      prefix: `profilePictures/${userId}_`,
+    });
+    for (const file of files) {
+      await file.delete();
+    }
+
     const fileName = `${userId}_${image.name}`;
     const filePath = `profilePictures/${fileName}`;
     const file = bucket.file(filePath);
@@ -46,11 +55,14 @@ export async function POST(request: NextRequest) {
     const downloadUrl = `https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${encodeURIComponent(
       filePath,
     )}?alt=media&token=${downloadToken}`;
+
     await auth.updateUser(userId, { photoURL: downloadUrl });
+
     const response = NextResponse.json({
       message: "Profile picture updated successfully",
       downloadUrl,
     });
+
     await refreshNextResponseCookies(request, response, authConfig);
     revalidatePath("/dashboard/settings");
 
