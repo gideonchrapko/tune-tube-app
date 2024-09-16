@@ -4,6 +4,7 @@ import { useAuth } from "@/app/auth/AuthContext";
 import {
   useUploadAddress,
   useUploadProfilePicture,
+  useDob,
 } from "@/hooks/useUploadProfilePicture";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
@@ -20,6 +21,7 @@ import {
 } from "./ui/alert-dialog";
 import { Button } from "./ui/button";
 import { AutocompleteComponent } from "./address-autocomplete";
+import { Input } from "./ui/input";
 
 type PaymentFields = {
   accountNumber?: string;
@@ -35,7 +37,6 @@ const SettingsPage = () => {
   const { user } = useAuth();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [dob, setDob] = useState("");
   const [addressNew, setAddressNew] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [paymentFields, setPaymentFields] = useState<PaymentFields>({});
@@ -43,8 +44,11 @@ const SettingsPage = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { mutate: uploadMutation } = useUploadProfilePicture();
   const { mutate: uploadAddressMutation } = useUploadAddress();
-  const clickable = profilePicture || addressNew;
+  const { mutate: uploadDobMutation } = useDob();
   const [existingAddress, setExistingAddress] = useState("");
+  const [dob, setDob] = useState("");
+  const [existingDob, setExistingDob] = useState("");
+  const clickable = profilePicture || addressNew || dob;
 
   useEffect(() => {
     const fetchUserAddress = async () => {
@@ -53,6 +57,15 @@ const SettingsPage = () => {
       }
     };
     fetchUserAddress();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserDob = async () => {
+      if (user?.customClaims.dob) {
+        setExistingDob(user?.customClaims.dob);
+      }
+    };
+    fetchUserDob();
   }, []);
 
   const handleProfilePictureChange = (
@@ -93,7 +106,11 @@ const SettingsPage = () => {
       // @ts-ignore
       uploadAddressMutation(addressNew);
     }
-  }, [profilePicture, addressNew]);
+    if (dob) {
+      // @ts-ignore
+      uploadDobMutation(dob);
+    }
+  }, [profilePicture, addressNew, dob]);
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 py-10">
@@ -132,8 +149,10 @@ const SettingsPage = () => {
                 type="file"
                 accept="image/*"
                 onChange={handleProfilePictureChange}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                className="cursor-pointer block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
+
+              <h2 className="font-bold text-5xl pt-8">{user?.displayName}</h2>
 
               {profilePicture && (
                 <p className="text-gray-700 mt-2">
@@ -147,7 +166,7 @@ const SettingsPage = () => {
                 <label className="block text-lg font-semibold mb-2">
                   First Name
                 </label>
-                <input
+                <Input
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
@@ -158,7 +177,7 @@ const SettingsPage = () => {
                 <label className="block text-lg font-semibold mb-2">
                   Last Name
                 </label>
-                <input
+                <Input
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
@@ -171,11 +190,12 @@ const SettingsPage = () => {
               <label className="block text-lg font-semibold mb-2">
                 Date of Birth
               </label>
-              <input
+              <Input
+                placeholder={existingDob}
                 type="date"
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg"
+                className="w-full border border-gray-300 rounded-lg"
               />
             </div>
 
@@ -207,7 +227,7 @@ const SettingsPage = () => {
 
             {paymentMethod === "ACH" && (
               <div className="mb-8">
-                <input
+                <Input
                   type="text"
                   placeholder="Account Number"
                   value={paymentFields.accountNumber || ""}
@@ -216,7 +236,7 @@ const SettingsPage = () => {
                   }
                   className="w-full p-3 border border-gray-300 rounded-lg mb-4"
                 />
-                <input
+                <Input
                   type="text"
                   placeholder="Routing Number"
                   value={paymentFields.routingNumber || ""}
@@ -225,7 +245,7 @@ const SettingsPage = () => {
                   }
                   className="w-full p-3 border border-gray-300 rounded-lg mb-4"
                 />
-                <input
+                <Input
                   type="text"
                   placeholder="Name"
                   value={paymentFields.name || ""}
@@ -239,7 +259,7 @@ const SettingsPage = () => {
 
             {paymentMethod === "Wire" && (
               <div className="mb-8">
-                <input
+                <Input
                   type="text"
                   placeholder="SWIFT Code"
                   value={paymentFields.swiftCode || ""}
@@ -248,7 +268,7 @@ const SettingsPage = () => {
                   }
                   className="w-full p-3 border border-gray-300 rounded-lg mb-4"
                 />
-                <input
+                <Input
                   type="text"
                   placeholder="Account Number"
                   value={paymentFields.accountNumber || ""}
@@ -257,7 +277,7 @@ const SettingsPage = () => {
                   }
                   className="w-full p-3 border border-gray-300 rounded-lg mb-4"
                 />
-                <input
+                <Input
                   type="text"
                   placeholder="Bank Address"
                   value={paymentFields.bankAddress || ""}
@@ -266,7 +286,7 @@ const SettingsPage = () => {
                   }
                   className="w-full p-3 border border-gray-300 rounded-lg mb-4"
                 />
-                <input
+                <Input
                   type="text"
                   placeholder="Billing Address"
                   value={paymentFields.billingAddress || ""}
@@ -280,7 +300,7 @@ const SettingsPage = () => {
 
             {paymentMethod === "PayPal" && (
               <div className="mb-8">
-                <input
+                <Input
                   type="email"
                   placeholder="PayPal Email"
                   value={paymentFields.email || ""}

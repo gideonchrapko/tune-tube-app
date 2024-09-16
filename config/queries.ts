@@ -29,6 +29,19 @@ export const uploadAddress = async (address: string) => {
   return response;
 };
 
+export const uploadDob = async (dob: string) => {
+  const response = await axiosInstance.post(
+    "/api/update-dob",
+    { dob: dob },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  return response;
+};
+
 export const createUserProfile = async () => {
   const response = await axiosInstance.post("/api/check-create-user", {
     headers: {

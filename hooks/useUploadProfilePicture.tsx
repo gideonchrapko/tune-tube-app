@@ -1,7 +1,7 @@
 import {
-  createUserProfile,
   uploadAddress,
   uploadProfilePicture,
+  uploadDob,
 } from "@/config/queries";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -34,6 +34,24 @@ export const useUploadAddress = () => {
       toast({
         title: "Congrats!",
         description: "Your address was successfully updated",
+      });
+      router.refresh();
+    },
+    onError: (error: Error) => {
+      console.error("Error changing address", error);
+    },
+  });
+};
+
+export const useDob = () => {
+  const router = useRouter();
+  const { toast } = useToast();
+  return useMutation<any>({
+    mutationFn: (dob: any) => uploadDob(dob),
+    onSuccess: () => {
+      toast({
+        title: "Congrats!",
+        description: "Your date of birth was successfully updated",
       });
       router.refresh();
     },
