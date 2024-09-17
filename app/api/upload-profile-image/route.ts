@@ -2,6 +2,7 @@ import { getTokens } from "next-firebase-auth-edge";
 import { authConfig } from "@/config/server-config";
 import { NextRequest, NextResponse } from "next/server";
 import { getFirebaseAdminApp } from "@/app/firebase";
+import { getFirestore } from "firebase-admin/firestore";
 import { getAuth } from "firebase-admin/auth";
 import admin from "firebase-admin";
 import { v4 as uuidv4 } from "uuid";
@@ -11,6 +12,7 @@ import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
   const tokens = await getTokens(cookies(), authConfig);
+  const db = getFirestore(getFirebaseAdminApp());
 
   if (!tokens) {
     return NextResponse.json(
@@ -21,7 +23,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const auth = getAuth(getFirebaseAdminApp());
-    const userId = tokens.decodedToken.user_id;
+    const uid = tokens.decodedToken.uid;
     const formData = await request.formData();
     const image = formData.get("file") as File;
     if (!image) {
@@ -32,13 +34,13 @@ export async function POST(request: NextRequest) {
       .bucket(process.env.NEXT_PUBLIC_STORAGE_BUCKET!);
 
     const [files] = await bucket.getFiles({
-      prefix: `profilePictures/${userId}_`,
+      prefix: `profilePictures/${uid}_`,
     });
     for (const file of files) {
       await file.delete();
     }
 
-    const fileName = `${userId}_${image.name}`;
+    const fileName = `${uid}_${image.name}`;
     const filePath = `profilePictures/${fileName}`;
     const file = bucket.file(filePath);
     const downloadToken = uuidv4();
@@ -56,7 +58,11 @@ export async function POST(request: NextRequest) {
       filePath,
     )}?alt=media&token=${downloadToken}`;
 
-    await auth.updateUser(userId, { photoURL: downloadUrl });
+    // updates the built in user
+    await auth.updateUser(uid, { photoURL: downloadUrl });
+
+    const userRef = db.collection("users").doc(uid);
+    userRef.update({ photoURL: downloadUrl });
 
     const response = NextResponse.json({
       message: "Profile picture updated successfully",

@@ -5,23 +5,13 @@ import {
   useUploadAddress,
   useUploadProfilePicture,
   useDob,
-} from "@/hooks/useUploadProfilePicture";
+  useDeleteAccount,
+} from "@/hooks/useSettingsMutations";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "./ui/alert-dialog";
-import { Button } from "./ui/button";
 import { AutocompleteComponent } from "./address-autocomplete";
 import { Input } from "./ui/input";
+import { DeleteAccount, SaveAccount } from "./account-buttons";
 
 type PaymentFields = {
   accountNumber?: string;
@@ -45,10 +35,13 @@ const SettingsPage = () => {
   const { mutate: uploadMutation } = useUploadProfilePicture();
   const { mutate: uploadAddressMutation } = useUploadAddress();
   const { mutate: uploadDobMutation } = useDob();
+  const { mutate: deleteAccountMutation } = useDeleteAccount();
   const [existingAddress, setExistingAddress] = useState("");
   const [dob, setDob] = useState("");
   const [existingDob, setExistingDob] = useState("");
   const clickable = profilePicture || addressNew || dob;
+
+  console.log(user?.customClaims);
 
   useEffect(() => {
     const fetchUserAddress = async () => {
@@ -112,6 +105,10 @@ const SettingsPage = () => {
     }
   }, [profilePicture, addressNew, dob]);
 
+  const handleDeleteAccount = useCallback(() => {
+    deleteAccountMutation();
+  }, []);
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 py-10">
       <div className="w-full max-w-4xl p-6 mt-12">
@@ -152,14 +149,14 @@ const SettingsPage = () => {
                 className="cursor-pointer block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
 
-              <h2 className="font-bold text-5xl pt-8">{user?.displayName}</h2>
-
               {profilePicture && (
                 <p className="text-gray-700 mt-2">
                   Selected file: {profilePicture.name}
                 </p>
               )}
             </div>
+
+            <h2 className="font-bold text-5xl py-8">{user?.displayName}</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div>
@@ -189,9 +186,13 @@ const SettingsPage = () => {
             <div className="mb-8">
               <label className="block text-lg font-semibold mb-2">
                 Date of Birth
+                <p className="text-opacity-55 font-bold">
+                  {existingDob && existingDob}
+                </p>
               </label>
               <Input
-                placeholder={existingDob}
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => (e.target.type = "text")}
                 type="date"
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
@@ -311,37 +312,10 @@ const SettingsPage = () => {
                 />
               </div>
             )}
+            <DeleteAccount handleDeleteAccount={handleDeleteAccount} />
 
             <div className="flex justify-center">
-              {clickable ? (
-                <AlertDialog>
-                  <AlertDialogTrigger>
-                    <Button className="py-3 px-6 rounded-lg bg-blue-500 hover:bg-blue-600">
-                      Save Changes
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you sure you want to save these changes?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action will permanently change your settings
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleSave}>
-                        Continue
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              ) : (
-                <Button className="py-3 px-6 rounded-lg bg-gray-500 hover:bg-gray-600">
-                  Save Changes
-                </Button>
-              )}
+              <SaveAccount clickable={clickable} handleSave={handleSave} />
             </div>
           </div>
         </div>

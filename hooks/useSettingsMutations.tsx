@@ -2,10 +2,14 @@ import {
   uploadAddress,
   uploadProfilePicture,
   uploadDob,
+  deleteAccount,
 } from "@/config/queries";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useToast } from "./use-toast";
+import { getFirebaseAuth } from "@/app/auth/firebase";
+import { signOut } from "firebase/auth";
+import { logout } from "@/api";
 
 export const useUploadProfilePicture = () => {
   const router = useRouter();
@@ -57,6 +61,23 @@ export const useDob = () => {
     },
     onError: (error: Error) => {
       console.error("Error changing address", error);
+    },
+  });
+};
+
+export const useDeleteAccount = () => {
+  const router = useRouter();
+  return useMutation<any>({
+    mutationFn: () => deleteAccount(),
+    onSuccess: async () => {
+      const auth = getFirebaseAuth();
+      await signOut(auth);
+      await logout();
+      router.refresh();
+      console.error("Account deleted");
+    },
+    onError: (error: Error) => {
+      console.error("Error deleting", error);
     },
   });
 };

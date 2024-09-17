@@ -22,7 +22,6 @@ export default function LoginPage() {
 
   async function handleLogin(credential: UserCredential) {
     await loginWithCredential(credential);
-
     createUserProfile();
     redirectAfterLogin();
   }

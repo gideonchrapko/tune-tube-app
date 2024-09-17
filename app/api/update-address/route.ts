@@ -4,13 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { refreshNextResponseCookies } from "next-firebase-auth-edge/lib/next/cookies";
-import { getFirebaseAdminApp } from "@/app/firebase";
-import { getFirestore } from "firebase-admin/firestore";
+import { updateCustomClaimsAddress, updateAddressDB } from "@/lib/admin";
 
 export async function POST(request: NextRequest) {
   const { address } = await request.json();
   const tokens = await getTokens(cookies(), authConfig);
-  const db = getFirestore(getFirebaseAdminApp());
 
   if (!tokens) {
     return NextResponse.json(
@@ -20,11 +18,9 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const userId = tokens.decodedToken.user_id;
-    const userRef = db.collection("users").doc(userId);
-    userRef.update({
-      address,
-    });
+    const uid = tokens.decodedToken.uid;
+    await updateAddressDB(uid, address);
+    await updateCustomClaimsAddress(uid, address);
 
     const response = NextResponse.json({
       message: "Address updated successfully",

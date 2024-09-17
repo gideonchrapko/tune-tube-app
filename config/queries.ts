@@ -51,3 +51,13 @@ export const createUserProfile = async () => {
 
   return response.data;
 };
+
+export const deleteAccount = async () => {
+  const response = await axiosInstance.post("/api/delete-account", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return response.data;
+};
