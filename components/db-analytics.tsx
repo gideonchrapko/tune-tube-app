@@ -7,8 +7,9 @@ export default function AnalyticsPage() {
   const { user } = useAuth();
 
   return (
-    <div className="flex min-h-screen bg-gray-100 pt-24">
-      <div className="flex flex-col w-full transition-all duration-300">
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 py-10">
+      <div className="w-full max-w-4xl p-6 mt-12">
+        <h1 className="text-5xl font-bold mb-6">Creator Analytics</h1>
         <div className="flex items-center h-[105px] px-8 py-6">
           <div>
             <p className="font-bold text-black text-3xl">Welcome,</p>
@@ -16,14 +17,14 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="flex justify-between items-center h-[400px] px-8 py-6 bg-[#f0f4f7]">
-          <div className="w-1/2 h-64 rounded-xl mx-4 bg-[#f0f4f7] shadow-lg relative flex items-center p-8">
-            <div className="w-1/3 pr-6">
+        <div className="flex justify-between items-center h-[400px] px-8 py-6">
+          <div className="w-1/2 h-64 rounded-xl mx-4 bg-slate-50 shadow-lg relative flex items-center p-8">
+            <div className="w-2/3 pr-6">
               <Image
                 src="https://firebasestorage.googleapis.com/v0/b/tune-tube-app-next.appspot.com/o/LD%20Soundscapes%20Artwork.png?alt=media&token=ce4fc862-68fa-437c-a6e3-7eb8897d8fb3"
                 alt="Cover Art"
-                width={150}
-                height={150}
+                width={200}
+                height={200}
                 className="rounded-lg"
               />
             </div>
@@ -62,8 +63,8 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          <div className="w-1/2 h-64 rounded-xl mx-4 bg-[#f0f4f7] shadow-lg relative flex items-center p-8">
-            <div className="w-1/3 pr-6">
+          <div className="w-1/2 h-64 rounded-xl mx-4 bg-slate-50 shadow-lg relative flex items-center p-8">
+            <div className="w-2/3 pr-6">
               <Image
                 src="https://firebasestorage.googleapis.com/v0/b/tune-tube-app-next.appspot.com/o/Sounds%20of%20Travel%20Artwork.png?alt=media&token=467d70b0-f873-4641-a6be-c7dc8118d217"
                 alt="Cover Art"
@@ -128,16 +129,21 @@ export default function AnalyticsPage() {
 
               {/* Text Content */}
               <div className="w-2/3 flex flex-col">
-                <p className="font-bold text-black text-2xl">My Favorite Song</p>
+                <p className="font-bold text-black text-2xl">
+                  My Favorite Song
+                </p>
                 <div className="mt-7">
                   <p className="text-black text-lg">
-                    <span className="font-semibold">Title:</span> <span>Far from Home</span>
+                    <span className="font-semibold">Title:</span>{" "}
+                    <span>Far from Home</span>
                   </p>
                   <p className="text-black text-lg">
-                    <span className="font-semibold">Album:</span> <span>Sounds of Travel</span>
+                    <span className="font-semibold">Album:</span>{" "}
+                    <span>Sounds of Travel</span>
                   </p>
                   <p className="text-black text-lg">
-                    <span className="font-semibold">Views:</span> <span>86,357,540</span>
+                    <span className="font-semibold">Views:</span>{" "}
+                    <span>86,357,540</span>
                   </p>
                 </div>
               </div>
@@ -158,9 +164,8 @@ export default function AnalyticsPage() {
 
             {/* Stats Section */}
             <div className="flex flex-col justify-start w-2/5 h-80 mt-6 ml-20">
-
               {/* Stats Data */}
-              <div className="mt-4 space-y-6" style={{ fontFamily: 'Avenir' }}>
+              <div className="mt-4 space-y-6" style={{ fontFamily: "Avenir" }}>
                 <p className="text-black text-xl">
                   <span className="font-semibold">Monthly Views: </span>
                   <span>90,106,396</span>
@@ -182,14 +187,15 @@ export default function AnalyticsPage() {
                   <span>$4,505.32</span>
                 </p>
                 <p className="text-black text-xl">
-                  <span className="font-semibold">Total Monthly Earnings: </span>
+                  <span className="font-semibold">
+                    Total Monthly Earnings:{" "}
+                  </span>
                   <span>$6,866.35</span>
                 </p>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

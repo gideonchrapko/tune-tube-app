@@ -10,6 +10,7 @@ import { config } from "@/config/base";
 import { AuthProvider } from "./auth/AuthProvider";
 import { Suspense } from "react";
 import Footer from "@/components/footer";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 const pacifico = Pacifico({ subsets: ["latin"], weight: "400" });
@@ -47,6 +48,7 @@ export default async function RootLayout({
             </Suspense>
           </AuthProvider>
           {children}
+          <Toaster />
           <Footer />
         </ReactQueryProvider>
       </body>

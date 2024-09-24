@@ -2,25 +2,7 @@ import { Pause, Play } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-export function FilterSounds({
-  sound,
-  isLoading,
-  error,
-  index,
-}: {
-  sound: any;
-  isLoading: boolean;
-  error: any;
-  index: any;
-}) {
-  if (isLoading) {
-    <div>Loading...</div>;
-  }
-
-  if (error) {
-    <div>There was an error loading data, please refresh page</div>;
-  }
-
+export function FilterSounds({ sound, index }: { sound: any; index: any }) {
   const [playingIndex, setPlayingIndex] = useState<number | null>(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);

@@ -22,37 +22,20 @@ export const getFirebaseApp = () => {
   return app;
 };
 
-export const useFirebaseAuth = () => {
-  const getFirebaseAuth = () => {
-    const auth = getAuth(getFirebaseApp());
+export function getFirebaseAuth() {
+  const auth = getAuth(getFirebaseApp());
 
-    if (process.env.NEXT_PUBLIC_EMULATOR_HOST) {
-      // https://stackoverflow.com/questions/73605307/firebase-auth-emulator-fails-intermittently-with-auth-emulator-config-failed
-      (auth as unknown as any)._canInitEmulator = true;
-      connectAuthEmulator(auth, process.env.NEXT_PUBLIC_EMULATOR_HOST, {
-        disableWarnings: true,
-      });
-    }
-    return auth;
-  };
+  // App relies only on server token. We make sure Firebase does not store credentials in the browser.
+  // See: https://github.com/awinogrodzki/next-firebase-auth-edge/issues/143
+  setPersistence(auth, inMemoryPersistence);
 
-  return { getFirebaseAuth };
-};
+  if (process.env.NEXT_PUBLIC_EMULATOR_HOST) {
+    // https://stackoverflow.com/questions/73605307/firebase-auth-emulator-fails-intermittently-with-auth-emulator-config-failed
+    (auth as unknown as any)._canInitEmulator = true;
+    connectAuthEmulator(auth, process.env.NEXT_PUBLIC_EMULATOR_HOST, {
+      disableWarnings: true,
+    });
+  }
 
-// export function getFirebaseAuth() {
-//   const auth = getAuth(getFirebaseApp());
-
-//   // // App relies only on server token. We make sure Firebase does not store credentials in the browser.
-//   // // See: https://github.com/awinogrodzki/next-firebase-auth-edge/issues/143
-//   // setPersistence(auth, inMemoryPersistence);
-
-//   // if (process.env.NEXT_PUBLIC_EMULATOR_HOST) {
-//   //   // https://stackoverflow.com/questions/73605307/firebase-auth-emulator-fails-intermittently-with-auth-emulator-config-failed
-//   //   (auth as unknown as any)._canInitEmulator = true;
-//   //   connectAuthEmulator(auth, process.env.NEXT_PUBLIC_EMULATOR_HOST, {
-//   //     disableWarnings: true,
-//   //   });
-//   // }
-
-//   return auth;
-// }
+  return auth;
+}

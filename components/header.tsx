@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/app/auth/AuthContext";
-import { useFirebaseAuth } from "@/app/auth/firebase";
+import { getFirebaseAuth } from "@/app/auth/firebase";
 import { signOut } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -16,12 +16,13 @@ import {
   DropdownMenuItem,
 } from "./ui/dropdown-menu";
 import Image from "next/image";
+import { useLoadingCallback } from "react-loading-hook";
+import { logout } from "@/api";
 
 export default function Header() {
   const { user } = useAuth();
   const router = useRouter();
   const [initials, setInitials] = useState<string | undefined>();
-  const { getFirebaseAuth } = useFirebaseAuth();
 
   useEffect(() => {
     const name = user?.displayName?.split(" ");
@@ -40,14 +41,13 @@ export default function Header() {
     [router],
   );
 
-  const handleLogout = useCallback(async () => {
+  const [handleLogout, isLogoutLoading] = useLoadingCallback(async () => {
     const auth = getFirebaseAuth();
     await signOut(auth);
-    await fetch("/api/logout", {
-      method: "GET",
-    });
-    window.location.reload();
-  }, []);
+    await logout();
+
+    router.refresh();
+  });
 
   return (
     <div className="fixed top-0 right-0 z-50 w-full text-right bg-white shadow h-20 py-2 px-5 flex items-center bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/40">

@@ -1,6 +1,8 @@
 import { getToken } from "@firebase/app-check";
 import { getAppCheck } from "../app-check";
 import { UserCredential } from "firebase/auth";
+// import { AuthRequestHandler } from "@/types/auth-request-handler";
+// import { createFirebaseTokenGenerator } from "@/types/token-generator";
 
 export async function login(token: string) {
   const headers: Record<string, string> = {
@@ -56,3 +58,31 @@ export async function checkEmailVerification() {
     headers,
   });
 }
+
+// const credential = options.credential ?? getApplicationDefault();
+// const authRequestHandler = new AuthRequestHandler(credential, {
+//   tenantId: options.tenantId,
+// });
+// const tokenGenerator = createFirebaseTokenGenerator(
+//   credential,
+//   options.tenantId,
+// );
+
+// async function updateUser(
+//   uid: string,
+//   properties: UpdateRequest,
+// ): Promise<any> {
+//   return authRequestHandler
+//     .updateExistingAccount(uid, properties)
+//     .then((existingUid) => getUser(existingUid))
+//     .then((user) => {
+//       if (!user) {
+//         throw new AuthError(
+//           AuthErrorCode.INTERNAL_ERROR,
+//           "Could not get recently updated user from database. Most likely it was deleted.",
+//         );
+//       }
+
+//       return user;
+//     });
+// }

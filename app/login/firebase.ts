@@ -2,7 +2,6 @@ import {
   Auth,
   AuthError,
   AuthProvider,
-  User,
   UserCredential,
   browserPopupRedirectResolver,
   GoogleAuthProvider,
@@ -19,7 +18,7 @@ export const logout = async (auth: Auth): Promise<void> => {
   return signOut(auth);
 };
 
-export const getGoogleProvider = (auth: Auth) => {
+export const getGoogleProvider = () => {
   const provider = new GoogleAuthProvider();
   provider.addScope("profile");
   provider.addScope("email");
@@ -30,10 +29,10 @@ export const getGoogleProvider = (auth: Auth) => {
   return provider;
 };
 
-export const loginWithProvider = async (
+export async function loginWithProvider(
   auth: Auth,
   provider: AuthProvider,
-): Promise<UserCredential> => {
+): Promise<UserCredential> {
   const result = await signInWithPopup(
     auth,
     provider,
@@ -41,7 +40,7 @@ export const loginWithProvider = async (
   );
 
   return result;
-};
+}
 
 export const loginWithProviderUsingRedirect = async (
   auth: Auth,
