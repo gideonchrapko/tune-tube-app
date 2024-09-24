@@ -4,13 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { refreshNextResponseCookies } from "next-firebase-auth-edge/lib/next/cookies";
-import { updateCustomClaimsDOB, updateDOBDB } from "@/lib/admin";
+import { updateCustomClaimsPayment, updatePaymentDB } from "@/lib/admin";
 
 export async function POST(request: NextRequest) {
   const { payment } = await request.json();
   const tokens = await getTokens(cookies(), authConfig);
-
-  console.log(payment, "payment api rotuer");
 
   if (!tokens) {
     return NextResponse.json(
@@ -21,8 +19,8 @@ export async function POST(request: NextRequest) {
 
   try {
     const uid = tokens.decodedToken.uid;
-    // await updateDOBDB(uid, payment);
-    // await updateCustomClaimsDOB(uid, payment);
+    await updatePaymentDB(uid, payment);
+    await updateCustomClaimsPayment(uid, payment);
 
     const response = NextResponse.json({
       message: "Payment method successfully changed",

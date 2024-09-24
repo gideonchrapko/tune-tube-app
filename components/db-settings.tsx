@@ -15,6 +15,7 @@ import { DeleteAccount, SaveAccount } from "./account-buttons";
 import { DatePicker } from "./date-picker";
 import PaymentMethodSelector from "./payment-selector";
 import { PaymentDetails } from "@/types/firebase-types";
+import { useIsPaymentDetailsEmpty } from "@/hooks/usePaymentDetailsEmpty";
 
 const SettingsPage = () => {
   const { user } = useAuth();
@@ -22,16 +23,22 @@ const SettingsPage = () => {
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState("");
-  const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({});
+  const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({
+    name: "",
+    details: {},
+  });
+
   const { mutate: uploadMutation } = useUploadProfilePicture();
   const { mutate: uploadAddressMutation } = useUploadAddress();
   const { mutate: uploadDobMutation } = useDob();
   const { mutate: deleteAccountMutation } = useDeleteAccount();
   const { mutate: uploadPaymentMethod } = usePaymentMethod();
-  const [existingAddress, setExistingAddress] = useState("");
   const [dob, setDob] = useState("");
   const [existingDob, setExistingDob] = useState("");
-  const clickable = profilePicture || addressNew || dob || paymentDetails;
+  const [existingAddress, setExistingAddress] = useState("");
+  const [existingPayment, setExistingPayment] = useState("");
+  const isPaymentDetailsEmpty = useIsPaymentDetailsEmpty(paymentDetails);
+  const savable = profilePicture || addressNew || dob || !isPaymentDetailsEmpty;
 
   useEffect(() => {
     const fetchUserAddress = async () => {
@@ -49,6 +56,15 @@ const SettingsPage = () => {
       }
     };
     fetchUserDob();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserPayment = async () => {
+      if (user?.customClaims.payment) {
+        setExistingPayment(user?.customClaims.payment);
+      }
+    };
+    fetchUserPayment();
   }, []);
 
   const handleProfilePictureChange = (
@@ -74,14 +90,14 @@ const SettingsPage = () => {
     if (dob) {
       uploadDobMutation(dob as any);
     }
-    if (paymentDetails) {
+    if (!isPaymentDetailsEmpty) {
       uploadPaymentMethod(paymentDetails as any);
     }
-  }, [profilePicture, addressNew, dob, paymentDetails]);
+  }, [profilePicture, addressNew, dob, paymentDetails, isPaymentDetailsEmpty]);
 
   const handleDeleteAccount = useCallback(() => {
     deleteAccountMutation();
-  }, []);
+  }, [deleteAccountMutation]);
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 py-10">
@@ -158,6 +174,7 @@ const SettingsPage = () => {
                 setPaymentMethod={setPaymentMethod}
                 paymentMethod={paymentMethod}
                 paymentDetails={paymentDetails}
+                existingPayment={existingPayment}
               />
             </div>
 
@@ -169,7 +186,7 @@ const SettingsPage = () => {
             </div>
 
             <div className="flex justify-center">
-              <SaveAccount clickable={clickable} handleSave={handleSave} />
+              <SaveAccount clickable={savable} handleSave={handleSave} />
             </div>
           </div>
         </div>

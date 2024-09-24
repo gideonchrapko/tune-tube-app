@@ -67,18 +67,13 @@ export interface UpdateRequest {
 }
 
 export type PaymentDetails = {
-  wire?: {
-    swiftCode: string;
-    accountNumber: string;
-    bankAddress: string;
-    billingAddress: string;
-  };
-  ach?: {
-    name: string;
-    accountNumber: string;
-    routingNumber: string;
-  };
-  paypal?: {
-    paypalEmail: string;
+  name: string;
+  details: {
+    swiftCode?: string;
+    accountNumber?: string;
+    bankAddress?: string;
+    billingAddress?: string;
+    routingNumber?: string;
+    paypalEmail?: string;
   };
 };

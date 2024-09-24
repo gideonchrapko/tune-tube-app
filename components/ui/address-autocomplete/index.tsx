@@ -38,6 +38,7 @@ interface AddressAutoCompleteProps {
   dialogTitle: string;
   showInlineError?: boolean;
   placeholder?: string;
+  disableInitialFetch?: boolean;
 }
 
 export default function AddressAutoComplete(props: AddressAutoCompleteProps) {
@@ -49,6 +50,7 @@ export default function AddressAutoComplete(props: AddressAutoCompleteProps) {
     searchInput,
     setSearchInput,
     placeholder,
+    disableInitialFetch,
   } = props;
 
   const [selectedPlaceId, setSelectedPlaceId] = useState("");
@@ -128,6 +130,7 @@ export default function AddressAutoComplete(props: AddressAutoCompleteProps) {
           setIsOpenDialog={setIsOpen}
           showInlineError={showInlineError}
           placeholder={placeholder}
+          disableInitialFetch={disableInitialFetch}
         />
       )}
     </>
@@ -142,6 +145,7 @@ interface CommonProps {
   searchInput: string;
   setSearchInput: (searchInput: string) => void;
   placeholder?: string;
+  disableInitialFetch?: boolean;
 }
 
 function AddressAutoCompleteInput(props: CommonProps) {
@@ -153,6 +157,7 @@ function AddressAutoCompleteInput(props: CommonProps) {
     searchInput,
     setSearchInput,
     placeholder,
+    disableInitialFetch,
   } = props;
 
   const [isOpen, setIsOpen] = useState(false);
@@ -169,7 +174,9 @@ function AddressAutoCompleteInput(props: CommonProps) {
   const debouncedSearchInput = useDebounce(searchInput, 500);
 
   const { data, isLoading } = useSWR(
-    `/api/address/autocomplete?input=${debouncedSearchInput}`,
+    disableInitialFetch && !debouncedSearchInput
+      ? null
+      : `/api/address/autocomplete?input=${debouncedSearchInput}`,
     fetcher,
   );
 

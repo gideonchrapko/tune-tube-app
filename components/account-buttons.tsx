@@ -1,4 +1,3 @@
-import { PaymentDetails } from "@/types/firebase-types";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -48,7 +47,7 @@ export function SaveAccount({
   clickable,
   handleSave,
 }: {
-  clickable: string | File | PaymentDetails;
+  clickable: string | boolean | File;
   handleSave: () => void;
 }) {
   return (
@@ -83,5 +82,38 @@ export function SaveAccount({
         </Button>
       )}
     </>
+  );
+}
+
+export function LeaveDialog({
+  showLeaveDialog,
+  setShowLeaveDialog,
+}: {
+  showLeaveDialog: any;
+  setShowLeaveDialog: any;
+}) {
+  return (
+    <AlertDialog open={showLeaveDialog} onOpenChange={setShowLeaveDialog}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you sure you want to leave?</AlertDialogTitle>
+          <AlertDialogDescription>
+            You have unsaved changes. If you leave, your changes will be lost.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={() => setShowLeaveDialog(false)}>
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            onClick={() => {
+              setShowLeaveDialog(false);
+            }}
+          >
+            Leave
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

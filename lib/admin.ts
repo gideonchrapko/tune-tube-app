@@ -57,3 +57,31 @@ export async function updateDOBDB(uid: any, dob: string) {
     console.error("Error updating firebase database", error);
   }
 }
+
+export async function updateCustomClaimsPayment(uid: any, payment: any) {
+  const auth = getAuth();
+  try {
+    const user = await auth.getUser(uid);
+    const currentClaims = user.customClaims || {};
+    let updatedClaims = { ...currentClaims };
+    updatedClaims = {
+      ...updatedClaims,
+      payment: payment,
+    };
+    await auth.setCustomUserClaims(uid, updatedClaims);
+  } catch (error) {
+    console.error("Error updating custom claims address:", error);
+  }
+}
+
+export async function updatePaymentDB(uid: any, payment: string) {
+  const db = getFirestore(getFirebaseAdminApp());
+  try {
+    const userRef = db.collection("users").doc(uid);
+    userRef.update({
+      payment,
+    });
+  } catch (error) {
+    console.error("Error updating firebase database", error);
+  }
+}
