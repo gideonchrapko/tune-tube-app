@@ -4,7 +4,6 @@ import { getFirestore } from "firebase-admin/firestore";
 
 export async function updateCustomClaimsAddress(uid: any, address: any) {
   const auth = getAuth();
-
   try {
     const user = await auth.getUser(uid);
     const currentClaims = user.customClaims || {};
@@ -14,8 +13,6 @@ export async function updateCustomClaimsAddress(uid: any, address: any) {
       address: address,
     };
     await auth.setCustomUserClaims(uid, updatedClaims);
-
-    console.log("Custom claims address updated successfully");
   } catch (error) {
     console.error("Error updating custom claims address:", error);
   }
@@ -23,14 +20,39 @@ export async function updateCustomClaimsAddress(uid: any, address: any) {
 
 export async function updateAddressDB(uid: any, address: string) {
   const db = getFirestore(getFirebaseAdminApp());
-
   try {
     const userRef = db.collection("users").doc(uid);
     userRef.update({
       address,
     });
+  } catch (error) {
+    console.error("Error updating firebase database", error);
+  }
+}
 
-    console.log("updated firebase database succesfully");
+export async function updateCustomClaimsDOB(uid: any, dob: any) {
+  const auth = getAuth();
+  try {
+    const user = await auth.getUser(uid);
+    const currentClaims = user.customClaims || {};
+    let updatedClaims = { ...currentClaims };
+    updatedClaims = {
+      ...updatedClaims,
+      dob: dob,
+    };
+    await auth.setCustomUserClaims(uid, updatedClaims);
+  } catch (error) {
+    console.error("Error updating custom claims address:", error);
+  }
+}
+
+export async function updateDOBDB(uid: any, dob: string) {
+  const db = getFirestore(getFirebaseAdminApp());
+  try {
+    const userRef = db.collection("users").doc(uid);
+    userRef.update({
+      dob,
+    });
   } catch (error) {
     console.error("Error updating firebase database", error);
   }

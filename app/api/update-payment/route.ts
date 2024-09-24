@@ -7,8 +7,10 @@ import { refreshNextResponseCookies } from "next-firebase-auth-edge/lib/next/coo
 import { updateCustomClaimsDOB, updateDOBDB } from "@/lib/admin";
 
 export async function POST(request: NextRequest) {
-  const { dob } = await request.json();
+  const { payment } = await request.json();
   const tokens = await getTokens(cookies(), authConfig);
+
+  console.log(payment, "payment api rotuer");
 
   if (!tokens) {
     return NextResponse.json(
@@ -19,12 +21,12 @@ export async function POST(request: NextRequest) {
 
   try {
     const uid = tokens.decodedToken.uid;
-    await updateDOBDB(uid, dob);
-    await updateCustomClaimsDOB(uid, dob);
+    // await updateDOBDB(uid, payment);
+    // await updateCustomClaimsDOB(uid, payment);
 
     const response = NextResponse.json({
-      message: "Date of birth updated successfully",
-      dob,
+      message: "Payment method successfully changed",
+      payment,
     });
 
     await refreshNextResponseCookies(request, response, authConfig);

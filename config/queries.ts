@@ -61,3 +61,17 @@ export const deleteAccount = async () => {
 
   return response.data;
 };
+
+export const uploadPayment = async (payment: any) => {
+  const response = await axiosInstance.post(
+    "/api/update-payment",
+    { payment: payment },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  return response.data;
+};

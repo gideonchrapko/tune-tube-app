@@ -29,7 +29,6 @@ export async function POST(request: NextRequest) {
 
     await refreshNextResponseCookies(request, response, authConfig);
     revalidatePath("/dashboard/settings");
-
     return response;
   } catch (error) {
     return NextResponse.json(

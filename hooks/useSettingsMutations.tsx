@@ -3,6 +3,7 @@ import {
   uploadProfilePicture,
   uploadDob,
   deleteAccount,
+  uploadPayment,
 } from "@/config/queries";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -78,6 +79,24 @@ export const useDeleteAccount = () => {
     },
     onError: (error: Error) => {
       console.error("Error deleting", error);
+    },
+  });
+};
+
+export const usePaymentMethod = () => {
+  const router = useRouter();
+  const { toast } = useToast();
+  return useMutation<any>({
+    mutationFn: (payment: any) => uploadPayment(payment),
+    onSuccess: async () => {
+      toast({
+        title: "Congrats!",
+        description: "Your payment method was changed",
+      });
+      router.refresh();
+    },
+    onError: (error: Error) => {
+      console.error("Error changing payment method", error);
     },
   });
 };

@@ -1,3 +1,4 @@
+import { PaymentDetails } from "@/types/firebase-types";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -47,7 +48,7 @@ export function SaveAccount({
   clickable,
   handleSave,
 }: {
-  clickable: string | File;
+  clickable: string | File | PaymentDetails;
   handleSave: () => void;
 }) {
   return (

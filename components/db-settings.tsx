@@ -6,42 +6,32 @@ import {
   useUploadProfilePicture,
   useDob,
   useDeleteAccount,
+  usePaymentMethod,
 } from "@/hooks/useSettingsMutations";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { AutocompleteComponent } from "./address-autocomplete";
-import { Input } from "./ui/input";
 import { DeleteAccount, SaveAccount } from "./account-buttons";
-
-type PaymentFields = {
-  accountNumber?: string;
-  routingNumber?: string;
-  name?: string;
-  swiftCode?: string;
-  bankAddress?: string;
-  billingAddress?: string;
-  email?: string;
-};
+import { DatePicker } from "./date-picker";
+import PaymentMethodSelector from "./payment-selector";
+import { PaymentDetails } from "@/types/firebase-types";
 
 const SettingsPage = () => {
   const { user } = useAuth();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [addressNew, setAddressNew] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const [paymentFields, setPaymentFields] = useState<PaymentFields>({});
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({});
   const { mutate: uploadMutation } = useUploadProfilePicture();
   const { mutate: uploadAddressMutation } = useUploadAddress();
   const { mutate: uploadDobMutation } = useDob();
   const { mutate: deleteAccountMutation } = useDeleteAccount();
+  const { mutate: uploadPaymentMethod } = usePaymentMethod();
   const [existingAddress, setExistingAddress] = useState("");
   const [dob, setDob] = useState("");
   const [existingDob, setExistingDob] = useState("");
-  const clickable = profilePicture || addressNew || dob;
-
-  console.log(user?.customClaims);
+  const clickable = profilePicture || addressNew || dob || paymentDetails;
 
   useEffect(() => {
     const fetchUserAddress = async () => {
@@ -67,28 +57,11 @@ const SettingsPage = () => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       setProfilePicture(file);
-      setPreviewUrl(URL.createObjectURL(file)); // Create preview URL
+      setPreviewUrl(URL.createObjectURL(file));
     } else {
       setProfilePicture(null);
       setPreviewUrl(null);
     }
-  };
-
-  const handlePaymentMethodChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setPaymentMethod(e.target.value);
-    setPaymentFields({});
-  };
-
-  const handlePaymentFieldChange = (
-    field: keyof PaymentFields,
-    value: string,
-  ) => {
-    setPaymentFields((prevFields) => ({
-      ...prevFields,
-      [field]: value,
-    }));
   };
 
   const handleSave = useCallback(() => {
@@ -96,14 +69,15 @@ const SettingsPage = () => {
       uploadMutation(profilePicture);
     }
     if (addressNew) {
-      // @ts-ignore
-      uploadAddressMutation(addressNew);
+      uploadAddressMutation(addressNew as any);
     }
     if (dob) {
-      // @ts-ignore
-      uploadDobMutation(dob);
+      uploadDobMutation(dob as any);
     }
-  }, [profilePicture, addressNew, dob]);
+    if (paymentDetails) {
+      uploadPaymentMethod(paymentDetails as any);
+    }
+  }, [profilePicture, addressNew, dob, paymentDetails]);
 
   const handleDeleteAccount = useCallback(() => {
     deleteAccountMutation();
@@ -158,46 +132,11 @@ const SettingsPage = () => {
 
             <h2 className="font-bold text-5xl py-8">{user?.displayName}</h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <div>
-                <label className="block text-lg font-semibold mb-2">
-                  First Name
-                </label>
-                <Input
-                  type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg"
-                />
-              </div>
-              <div>
-                <label className="block text-lg font-semibold mb-2">
-                  Last Name
-                </label>
-                <Input
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg"
-                />
-              </div>
-            </div>
-
             <div className="mb-8">
               <label className="block text-lg font-semibold mb-2">
                 Date of Birth
-                <p className="text-opacity-55 font-bold">
-                  {existingDob && existingDob}
-                </p>
               </label>
-              <Input
-                onFocus={(e) => (e.target.type = "date")}
-                onBlur={(e) => (e.target.type = "text")}
-                type="date"
-                value={dob}
-                onChange={(e) => setDob(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg"
-              />
+              <DatePicker existingDob={existingDob} dob={dob} setDob={setDob} />
             </div>
 
             <div className="mb-8">
@@ -214,105 +153,20 @@ const SettingsPage = () => {
               <label className="block text-lg font-semibold mb-2">
                 Payment Method
               </label>
-              <select
-                value={paymentMethod}
-                onChange={handlePaymentMethodChange}
-                className="w-full p-3 border border-gray-300 rounded-lg"
-              >
-                <option value="">Select Payment Method</option>
-                <option value="ACH">ACH</option>
-                <option value="Wire">Wire</option>
-                <option value="PayPal">PayPal</option>
-              </select>
+              <PaymentMethodSelector
+                setPaymentDetails={setPaymentDetails}
+                setPaymentMethod={setPaymentMethod}
+                paymentMethod={paymentMethod}
+                paymentDetails={paymentDetails}
+              />
             </div>
 
-            {paymentMethod === "ACH" && (
-              <div className="mb-8">
-                <Input
-                  type="text"
-                  placeholder="Account Number"
-                  value={paymentFields.accountNumber || ""}
-                  onChange={(e) =>
-                    handlePaymentFieldChange("accountNumber", e.target.value)
-                  }
-                  className="w-full p-3 border border-gray-300 rounded-lg mb-4"
-                />
-                <Input
-                  type="text"
-                  placeholder="Routing Number"
-                  value={paymentFields.routingNumber || ""}
-                  onChange={(e) =>
-                    handlePaymentFieldChange("routingNumber", e.target.value)
-                  }
-                  className="w-full p-3 border border-gray-300 rounded-lg mb-4"
-                />
-                <Input
-                  type="text"
-                  placeholder="Name"
-                  value={paymentFields.name || ""}
-                  onChange={(e) =>
-                    handlePaymentFieldChange("name", e.target.value)
-                  }
-                  className="w-full p-3 border border-gray-300 rounded-lg"
-                />
-              </div>
-            )}
-
-            {paymentMethod === "Wire" && (
-              <div className="mb-8">
-                <Input
-                  type="text"
-                  placeholder="SWIFT Code"
-                  value={paymentFields.swiftCode || ""}
-                  onChange={(e) =>
-                    handlePaymentFieldChange("swiftCode", e.target.value)
-                  }
-                  className="w-full p-3 border border-gray-300 rounded-lg mb-4"
-                />
-                <Input
-                  type="text"
-                  placeholder="Account Number"
-                  value={paymentFields.accountNumber || ""}
-                  onChange={(e) =>
-                    handlePaymentFieldChange("accountNumber", e.target.value)
-                  }
-                  className="w-full p-3 border border-gray-300 rounded-lg mb-4"
-                />
-                <Input
-                  type="text"
-                  placeholder="Bank Address"
-                  value={paymentFields.bankAddress || ""}
-                  onChange={(e) =>
-                    handlePaymentFieldChange("bankAddress", e.target.value)
-                  }
-                  className="w-full p-3 border border-gray-300 rounded-lg mb-4"
-                />
-                <Input
-                  type="text"
-                  placeholder="Billing Address"
-                  value={paymentFields.billingAddress || ""}
-                  onChange={(e) =>
-                    handlePaymentFieldChange("billingAddress", e.target.value)
-                  }
-                  className="w-full p-3 border border-gray-300 rounded-lg"
-                />
-              </div>
-            )}
-
-            {paymentMethod === "PayPal" && (
-              <div className="mb-8">
-                <Input
-                  type="email"
-                  placeholder="PayPal Email"
-                  value={paymentFields.email || ""}
-                  onChange={(e) =>
-                    handlePaymentFieldChange("email", e.target.value)
-                  }
-                  className="w-full p-3 border border-gray-300 rounded-lg"
-                />
-              </div>
-            )}
-            <DeleteAccount handleDeleteAccount={handleDeleteAccount} />
+            <div className="mb-8">
+              <label className="block text-lg font-semibold mb-2">
+                Delete Account
+              </label>
+              <DeleteAccount handleDeleteAccount={handleDeleteAccount} />
+            </div>
 
             <div className="flex justify-center">
               <SaveAccount clickable={clickable} handleSave={handleSave} />
