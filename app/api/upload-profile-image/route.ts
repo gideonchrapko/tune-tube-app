@@ -58,7 +58,6 @@ export async function POST(request: NextRequest) {
       filePath,
     )}?alt=media&token=${downloadToken}`;
 
-    // updates the built in user
     await auth.updateUser(uid, { photoURL: downloadUrl });
 
     const userRef = db.collection("users").doc(uid);

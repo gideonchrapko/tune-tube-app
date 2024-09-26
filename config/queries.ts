@@ -75,3 +75,17 @@ export const uploadPayment = async (payment: any) => {
 
   return response.data;
 };
+
+export const uploadYoutubeVideo = async (data: any) => {
+  const response = await axiosInstance.post(
+    "/api/upload-youtube",
+    { data: data },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  return response.data;
+};
