@@ -11,17 +11,10 @@ const DbSyncPage = () => {
   const [volume, setVolume] = useState(0.5); // Default volume (50%)
   const [playbackRate, setPlaybackRate] = useState(1); // Playback speed
   const [audioStart, setAudioStart] = useState(0); // Audio start time
-  const [uploadData, setUploadData] = useState(null);
-  const {
-    refetch: uploadVideo,
-    isLoading,
-    isError,
-    data,
-    error,
-  } = useYoutubeUpload(uploadData);
-  console.log(data, "inside of sync");
+  const uploadData = "Upload data here";
 
-  // Handles video upload from the uploader component
+  const { refetch: uploadVideo, data } = useYoutubeUpload(uploadData);
+
   const handleVideoUpload = (files: File[]) => {
     if (files && files[0]) {
       const uploadedVideo = URL.createObjectURL(files[0]);

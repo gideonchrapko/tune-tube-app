@@ -1,8 +1,6 @@
 import { getTokens } from "next-firebase-auth-edge";
 import { authConfig } from "@/config/server-config";
 import { NextRequest, NextResponse } from "next/server";
-import { getFirebaseAdminApp } from "@/app/firebase";
-import { getFirestore } from "firebase-admin/firestore";
 import fs from "fs";
 import path from "path";
 
@@ -17,6 +15,8 @@ export async function POST(request: NextRequest) {
       { status: 401 },
     );
   }
+
+  // console.log(tokens.customToken);
 
   try {
     const uid = tokens.decodedToken.uid;
@@ -58,11 +58,13 @@ export async function POST(request: NextRequest) {
 
     const response = await fetch("http://localhost:8000/upload-youtube/", {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${tokens.token}`,
+      },
       body: formData,
     });
 
     const data = await response.json();
-    console.log(data, "data inside of api route");
 
     return NextResponse.json({ data });
   } catch (error) {
