@@ -4,8 +4,9 @@ import {
   uploadDob,
   deleteAccount,
   uploadPayment,
+  uploadYoutubeVideo,
 } from "@/config/queries";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useToast } from "./use-toast";
 import { getFirebaseAuth } from "@/app/auth/firebase";
@@ -100,3 +101,11 @@ export const usePaymentMethod = () => {
     },
   });
 };
+
+export function useYoutubeUpload(data: any) {
+  return useQuery({
+    queryKey: ["uploadYoutube", data],
+    queryFn: () => uploadYoutubeVideo(data),
+    enabled: false,
+  });
+}

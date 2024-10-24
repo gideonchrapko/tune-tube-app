@@ -1,16 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import ReactPlayer from "react-player";
 import Uploader from "@/components/ui/uploader"; // Importing the Uploader component
+import { Button } from "./ui/button";
+import { useYoutubeUpload } from "@/hooks/useSettingsMutations";
 
 const DbSyncPage = () => {
   const [video, setVideo] = useState<string | null>(null); // State for video URL
   const [volume, setVolume] = useState(0.5); // Default volume (50%)
   const [playbackRate, setPlaybackRate] = useState(1); // Playback speed
   const [audioStart, setAudioStart] = useState(0); // Audio start time
+  const uploadData = "Upload data here";
 
-  // Handles video upload from the uploader component
+  const { refetch: uploadVideo, data } = useYoutubeUpload(uploadData);
+
   const handleVideoUpload = (files: File[]) => {
     if (files && files[0]) {
       const uploadedVideo = URL.createObjectURL(files[0]);
@@ -18,10 +22,15 @@ const DbSyncPage = () => {
     }
   };
 
+  const handleEndPoint = useCallback(async () => {
+    await uploadVideo();
+  }, [uploadVideo]);
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 py-10">
       <div className="w-full max-w-4xl p-6 mt-12">
         <h1 className="text-5xl font-bold">Sync</h1>
+        <Button onClick={handleEndPoint}>Hit API endpoint</Button>
         <div className="container mx-auto">
           {!video ? (
             // Show the uploader first if no video is uploaded

@@ -23,7 +23,6 @@ export default function LoginPage() {
   async function handleLogin(credential: UserCredential) {
     await loginWithCredential(credential);
     createUserProfile();
-    redirectAfterLogin();
   }
 
   const [handleLoginWithGoogle, isGoogleLoading] = useLoadingCallback(
@@ -32,7 +31,7 @@ export default function LoginPage() {
       const auth = getFirebaseAuth();
       await handleLogin(await loginWithProvider(auth, getGoogleProvider()));
 
-      router.push(redirect ?? "/");
+      redirectAfterLogin();
     },
   );
 
