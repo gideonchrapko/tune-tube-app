@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { Button } from "./button";
 
 interface UploaderProps {
   onVideoUpload: (files: File[]) => void;
@@ -23,7 +24,7 @@ const Uploader: React.FC<UploaderProps> = ({ onVideoUpload }) => {
   return (
     <div
       {...getRootProps()}
-      className="flex flex-col items-center justify-center w-full h-[550px] border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 p-4 text-center mt-10 cursor-pointer"
+      className="flex flex-col items-center justify-center w-full h-[550px] border-2 border-dashed hover:border-blue-500 border-gray-300 rounded-lg bg-gray-50 p-4 text-center mt-10 cursor-pointer"
     >
       <input {...getInputProps()} />
       <svg
@@ -41,9 +42,9 @@ const Uploader: React.FC<UploaderProps> = ({ onVideoUpload }) => {
         />
       </svg>
       <p className="text-gray-600">Drag and drop video files to upload</p>
-      <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg">
+      <Button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg">
         Select files
-      </button>
+      </Button>
     </div>
   );
 };

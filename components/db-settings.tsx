@@ -11,11 +11,11 @@ import {
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { AutocompleteComponent } from "./address-autocomplete";
-import { DeleteAccount, SaveAccount } from "./account-buttons";
-import { DatePicker } from "./date-picker";
+import { SaveAccount } from "./account-buttons";
 import PaymentMethodSelector from "./payment-selector";
 import { PaymentDetails } from "@/types/firebase-types";
 import { useIsPaymentDetailsEmpty } from "@/hooks/usePaymentDetailsEmpty";
+import { CalendarForm } from "./calender-form";
 
 const SettingsPage = () => {
   const { user } = useAuth();
@@ -152,7 +152,11 @@ const SettingsPage = () => {
               <label className="block text-lg font-semibold mb-2">
                 Date of Birth
               </label>
-              <DatePicker existingDob={existingDob} dob={dob} setDob={setDob} />
+              <CalendarForm
+                existingDob={existingDob}
+                dob={dob}
+                setDob={setDob}
+              />
             </div>
 
             <div className="mb-8">
@@ -176,13 +180,6 @@ const SettingsPage = () => {
                 paymentDetails={paymentDetails}
                 existingPayment={existingPayment}
               />
-            </div>
-
-            <div className="mb-8">
-              <label className="block text-lg font-semibold mb-2">
-                Delete Account
-              </label>
-              <DeleteAccount handleDeleteAccount={handleDeleteAccount} />
             </div>
 
             <div className="flex justify-center">

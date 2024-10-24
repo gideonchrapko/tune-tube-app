@@ -32,7 +32,7 @@ export default function Header() {
       const secondInitial = name[length - 1].charAt(0).toUpperCase();
       setInitials(firstInitial.concat(secondInitial));
     }
-  }, [user?.displayName]);
+  }, [user, user?.displayName]);
 
   const navigate = useCallback(
     (route: string) => {

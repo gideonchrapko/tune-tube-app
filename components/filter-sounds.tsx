@@ -2,45 +2,53 @@ import { Pause, Play } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-export function FilterSounds({ sound, index }: { sound: any; index: any }) {
-  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+export function FilterSounds({
+  sound,
+  index,
+  playingIndex,
+  setPlayingIndex,
+}: {
+  sound: any;
+  index: number;
+  playingIndex: number | null;
+  setPlayingIndex: (index: number | null) => void;
+}) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const audioRefs = useRef<(HTMLAudioElement | null)[]>([]);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const handlePlayPause = (index: number) => {
-    const currentAudio = audioRefs.current[index];
-    if (!currentAudio) return;
+  const handlePlayPause = () => {
+    if (!audioRef.current) return;
 
     if (playingIndex === index) {
-      currentAudio.pause();
+      audioRef.current.pause();
       setPlayingIndex(null);
     } else {
-      if (playingIndex !== null && audioRefs.current[playingIndex]) {
-        audioRefs.current[playingIndex]?.pause();
+      if (playingIndex !== null) {
+        const playingAudio = document.querySelector(
+          `audio[data-index="${playingIndex}"]`,
+        ) as HTMLAudioElement;
+        if (playingAudio) {
+          playingAudio.pause();
+        }
       }
-      currentAudio.play();
+      audioRef.current.play();
       setPlayingIndex(index);
-      setDuration(currentAudio.duration);
     }
   };
 
-  const handleTimeUpdate = (index: number) => {
-    const currentAudio = audioRefs.current[index];
-    if (currentAudio) {
-      setCurrentTime(currentAudio.currentTime);
-      setDuration(currentAudio.duration);
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+      setDuration(audioRef.current.duration);
     }
   };
 
-  const handleSeek = (
-    index: number,
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const currentAudio = audioRefs.current[index];
-    if (currentAudio) {
-      const seekTime = (Number(e.target.value) / 100) * currentAudio.duration;
-      currentAudio.currentTime = seekTime;
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (audioRef.current) {
+      const seekTime =
+        (Number(e.target.value) / 100) * audioRef.current.duration;
+      audioRef.current.currentTime = seekTime;
     }
   };
 
@@ -59,7 +67,7 @@ export function FilterSounds({ sound, index }: { sound: any; index: any }) {
             className={`text-blue-500 hover:text-blue-700 ${
               playingIndex === index ? "fa fa-pause" : "fa fa-play"
             }`}
-            onClick={() => handlePlayPause(index)}
+            onClick={() => handlePlayPause()}
           >
             {playingIndex === index ? <Pause /> : <Play />}
           </button>
@@ -74,7 +82,7 @@ export function FilterSounds({ sound, index }: { sound: any; index: any }) {
                 ? (currentTime / duration) * 100
                 : 0
             }
-            onChange={(e) => handleSeek(index, e)}
+            onChange={(e) => handleSeek(e)}
           />
         </div>
 
@@ -96,16 +104,12 @@ export function FilterSounds({ sound, index }: { sound: any; index: any }) {
           </div>
         </div>
       </div>
-
       <audio
-        ref={(el) => {
-          audioRefs.current[index] = el;
-        }}
+        ref={audioRef}
         src={sound.songUrl}
-        onTimeUpdate={() => handleTimeUpdate(index)}
-        onLoadedMetadata={() =>
-          setDuration(audioRefs.current[index]?.duration || 0)
-        }
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)}
+        data-index={index}
       />
     </div>
   );

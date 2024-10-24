@@ -24,6 +24,7 @@ const moods = [
 const DbSoundsPage = ({ soundsFirebase }: { soundsFirebase: any }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
 
   const toggleMood = (mood: string) => {
     setSelectedMoods((prevMoods) =>
@@ -77,7 +78,13 @@ const DbSoundsPage = ({ soundsFirebase }: { soundsFirebase: any }) => {
           <>
             {filteredSounds?.map((sound: any, index: number) => (
               <div key={index}>
-                <FilterSounds key={index} index={index} sound={sound} />
+                <FilterSounds
+                  key={index}
+                  index={index}
+                  sound={sound}
+                  playingIndex={playingIndex}
+                  setPlayingIndex={setPlayingIndex}
+                />
               </div>
             ))}
           </>

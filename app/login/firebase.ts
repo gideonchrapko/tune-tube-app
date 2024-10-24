@@ -33,13 +33,17 @@ export async function loginWithProvider(
   auth: Auth,
   provider: AuthProvider,
 ): Promise<UserCredential> {
-  const result = await signInWithPopup(
-    auth,
-    provider,
-    browserPopupRedirectResolver,
-  );
-
-  return result;
+  try {
+    const result = await signInWithPopup(
+      auth,
+      provider,
+      browserPopupRedirectResolver,
+    );
+    return result;
+  } catch (error) {
+    console.log(error, "loginWithProvider not working");
+    throw error; // Re-throw other errors
+  }
 }
 
 export const loginWithProviderUsingRedirect = async (

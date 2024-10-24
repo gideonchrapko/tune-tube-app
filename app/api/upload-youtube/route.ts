@@ -1,12 +1,12 @@
 import { getTokens } from "next-firebase-auth-edge";
 import { authConfig } from "@/config/server-config";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
 import { cookies } from "next/headers";
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   const tokens = await getTokens(cookies(), authConfig);
 
   if (!tokens) {
@@ -15,8 +15,6 @@ export async function POST(request: NextRequest) {
       { status: 401 },
     );
   }
-
-  // console.log(tokens.customToken);
 
   try {
     const uid = tokens.decodedToken.uid;
@@ -33,7 +31,6 @@ export async function POST(request: NextRequest) {
       }),
     );
 
-    // Read files from the public directory
     const videoPath = path.join(
       process.cwd(),
       "public",
@@ -56,13 +53,17 @@ export async function POST(request: NextRequest) {
     formData.append("audio", audioFile);
     formData.append("video", videoFile);
 
-    const response = await fetch("http://localhost:8000/upload-youtube/", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${tokens.token}`,
+    const response = await fetch(
+      // "http://147.182.147.179:8000/upload-youtube/",
+      "http://0.0.0.0:8000/upload-youtube/",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${tokens.token}`,
+        },
+        body: formData,
       },
-      body: formData,
-    });
+    );
 
     const data = await response.json();
 
